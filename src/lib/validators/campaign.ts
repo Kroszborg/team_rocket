@@ -22,7 +22,7 @@ export const campaignSchema = z.object({
   budget: z.object({
     total: z.number().positive('Budget must be positive').max(1000000, 'Budget too large'),
     duration: z.number().positive('Duration must be positive').max(365, 'Duration cannot exceed 365 days'),
-    channels: z.record(z.number().min(0)),
+    channels: z.record(z.string(), z.number().min(0)),
   }),
   channels: z.object({
     preferred: z.array(z.string()),

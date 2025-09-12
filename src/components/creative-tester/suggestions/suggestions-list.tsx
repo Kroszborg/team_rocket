@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Creative } from '@/lib/types';
-import { CheckCircle, Copy, Lightbulb, TrendingUp } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Creative } from "@/lib/types";
+import { CheckCircle, Copy, Lightbulb, TrendingUp } from "lucide-react";
 
 interface SuggestionsListProps {
   suggestions: string[];
@@ -12,12 +12,19 @@ interface SuggestionsListProps {
   onApply: (suggestion: string) => void;
 }
 
-export function SuggestionsList({ suggestions, copiedSuggestion, onCopy, onApply }: SuggestionsListProps) {
+export function SuggestionsList({
+  suggestions,
+  copiedSuggestion,
+  onCopy,
+  onApply,
+}: SuggestionsListProps) {
   if (suggestions.length === 0) return null;
 
   const parseSuggestion = (suggestion: string) => {
-    const parts = suggestion.split(' - ');
-    return parts.length === 2 ? { title: parts[0], description: parts[1] } : { title: suggestion };
+    const parts = suggestion.split(" - ");
+    return parts.length === 2
+      ? { title: parts[0], description: parts[1] }
+      : { title: suggestion };
   };
 
   return (
@@ -31,15 +38,15 @@ export function SuggestionsList({ suggestions, copiedSuggestion, onCopy, onApply
       <CardContent>
         <div className="space-y-3">
           {suggestions.map((suggestion, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="group relative p-4 bg-muted/50 rounded-lg border hover:border-primary/20 transition-all"
             >
               <div className="flex items-start justify-between">
                 <p className="text-sm leading-relaxed pr-4">{suggestion}</p>
                 <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Button
-                    variant="ghost"
+                    variant="default"
                     size="icon"
                     className="h-8 w-8"
                     onClick={() => onCopy(suggestion, index)}
@@ -52,7 +59,7 @@ export function SuggestionsList({ suggestions, copiedSuggestion, onCopy, onApply
                     )}
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="default"
                     size="icon"
                     className="h-8 w-8"
                     onClick={() => onApply(suggestion)}

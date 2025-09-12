@@ -1,45 +1,65 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { OptimizationSuggestion } from '@/lib/types';
-import { Lightbulb, TrendingUp, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { OptimizationSuggestion } from "@/lib/types";
+import {
+  Lightbulb,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle,
+  ArrowRight,
+} from "lucide-react";
 
 interface OptimizationInsightsProps {
   optimization: OptimizationSuggestion[];
 }
 
-export function OptimizationInsights({ optimization }: OptimizationInsightsProps) {
-  const getImpactLevel = (impact: { roi_increase: number; reach_increase: number; conversion_increase: number }) => {
-    const maxIncrease = Math.max(impact.roi_increase, impact.reach_increase, impact.conversion_increase);
-    if (maxIncrease >= 20) return 'high';
-    if (maxIncrease >= 10) return 'medium';
-    return 'low';
+export function OptimizationInsights({
+  optimization,
+}: OptimizationInsightsProps) {
+  const getImpactLevel = (impact: {
+    roi_increase: number;
+    reach_increase: number;
+    conversion_increase: number;
+  }) => {
+    const maxIncrease = Math.max(
+      impact.roi_increase,
+      impact.reach_increase,
+      impact.conversion_increase
+    );
+    if (maxIncrease >= 20) return "high";
+    if (maxIncrease >= 10) return "medium";
+    return "low";
   };
 
-  const getExpectedImprovement = (impact: { roi_increase: number; reach_increase: number; conversion_increase: number }) => {
+  const getExpectedImprovement = (impact: {
+    roi_increase: number;
+    reach_increase: number;
+    conversion_increase: number;
+  }) => {
     return `${impact.roi_increase}% ROI increase`;
   };
 
   const getImpactColor = (impactLevel: string) => {
     switch (impactLevel.toLowerCase()) {
-      case 'high':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'low':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case "high":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200";
+      case "low":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
     }
   };
 
   const getImpactIcon = (impactLevel: string) => {
     switch (impactLevel.toLowerCase()) {
-      case 'high':
+      case "high":
         return <TrendingUp className="h-4 w-4" />;
-      case 'medium':
+      case "medium":
         return <AlertTriangle className="h-4 w-4" />;
-      case 'low':
+      case "low":
         return <CheckCircle className="h-4 w-4" />;
       default:
         return <Lightbulb className="h-4 w-4" />;
@@ -56,14 +76,20 @@ export function OptimizationInsights({ optimization }: OptimizationInsightsProps
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">No optimization suggestions available at this time.</p>
+          <p className="text-muted-foreground">
+            No optimization suggestions available at this time.
+          </p>
         </CardContent>
       </Card>
     );
   }
 
-  const highImpactSuggestions = optimization.filter(opt => getImpactLevel(opt.impact) === 'high');
-  const otherSuggestions = optimization.filter(opt => getImpactLevel(opt.impact) !== 'high');
+  const highImpactSuggestions = optimization.filter(
+    (opt) => getImpactLevel(opt.impact) === "high"
+  );
+  const otherSuggestions = optimization.filter(
+    (opt) => getImpactLevel(opt.impact) !== "high"
+  );
 
   return (
     <div className="space-y-6">
@@ -79,14 +105,21 @@ export function OptimizationInsights({ optimization }: OptimizationInsightsProps
           <CardContent className="space-y-4">
             {highImpactSuggestions.map((suggestion, index) => {
               const impactLevel = getImpactLevel(suggestion.impact);
-              const expectedImprovement = getExpectedImprovement(suggestion.impact);
-              
+              const expectedImprovement = getExpectedImprovement(
+                suggestion.impact
+              );
+
               return (
-                <div key={index} className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <div
+                  key={index}
+                  className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800"
+                >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       {getImpactIcon(impactLevel)}
-                      <h3 className="font-semibold text-green-800 dark:text-green-200">{suggestion.title}</h3>
+                      <h3 className="font-semibold text-green-800 dark:text-green-200">
+                        {suggestion.title}
+                      </h3>
                     </div>
                     <Badge className={getImpactColor(impactLevel)}>
                       {impactLevel} Impact
@@ -99,7 +132,11 @@ export function OptimizationInsights({ optimization }: OptimizationInsightsProps
                     <span className="text-sm font-medium text-green-800 dark:text-green-200">
                       Potential improvement: +{expectedImprovement}
                     </span>
-                    <Button size="sm" variant="outline" className="border-green-300 text-green-700 hover:bg-green-100 dark:border-green-700 dark:text-green-400">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="border-green-300 text-green-700 hover:bg-green-100 dark:border-green-700 dark:text-green-400"
+                    >
                       Apply <ArrowRight className="h-3 w-3 ml-1" />
                     </Button>
                   </div>
@@ -123,10 +160,15 @@ export function OptimizationInsights({ optimization }: OptimizationInsightsProps
             <div className="grid gap-4 md:grid-cols-2">
               {otherSuggestions.map((suggestion, index) => {
                 const impactLevel = getImpactLevel(suggestion.impact);
-                const expectedImprovement = getExpectedImprovement(suggestion.impact);
-                
+                const expectedImprovement = getExpectedImprovement(
+                  suggestion.impact
+                );
+
                 return (
-                  <div key={index} className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                  <div
+                    key={index}
+                    className="p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                  >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         {getImpactIcon(impactLevel)}
@@ -143,7 +185,11 @@ export function OptimizationInsights({ optimization }: OptimizationInsightsProps
                       <span className="text-sm font-medium">
                         +{expectedImprovement}
                       </span>
-                      <Button size="sm" variant="ghost" className="h-8 px-2 text-xs">
+                      <Button
+                        size="sm"
+                        variant="default"
+                        className="h-8 px-2 text-xs"
+                      >
                         Learn More
                       </Button>
                     </div>
@@ -164,9 +210,15 @@ export function OptimizationInsights({ optimization }: OptimizationInsightsProps
                 Ready to Optimize?
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                Implementing these suggestions could improve your campaign performance by up to{' '}
+                Implementing these suggestions could improve your campaign
+                performance by up to{" "}
                 <span className="font-bold">
-                  {optimization.length > 0 ? Math.max(...optimization.map(opt => opt.impact.roi_increase)) : 0}%
+                  {optimization.length > 0
+                    ? Math.max(
+                        ...optimization.map((opt) => opt.impact.roi_increase)
+                      )
+                    : 0}
+                  %
                 </span>
               </p>
             </div>

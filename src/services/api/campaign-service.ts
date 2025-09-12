@@ -9,7 +9,7 @@ export class CampaignService {
     const validationResult = campaignSchema.safeParse(data);
     
     if (!validationResult.success) {
-      const errors = validationResult.error.errors.map(err => ({
+      const errors = validationResult.error.issues.map(err => ({
         path: err.path.join('.'),
         message: err.message,
       }));
@@ -48,9 +48,9 @@ export class CampaignService {
         interests: campaignData.targeting.interests.map(i => i.trim()).filter(i => i.length > 0),
         location: campaignData.targeting.location.map(l => l.trim()).filter(l => l.length > 0),
       },
-      budget: campaignData.budget,
-      channels: campaignData.channels,
-      creatives: campaignData.creatives || [],
+      budget: campaignData.budget as any,
+      channels: campaignData.channels as any,
+      creatives: (campaignData.creatives || []) as any,
       createdAt: new Date(),
     };
   }
