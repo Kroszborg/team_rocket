@@ -34,12 +34,12 @@ export interface TargetDemographics {
 export interface BudgetAllocation {
   total: number;
   duration: number; // days
-  channels: Record<string, number>;
+  channels: Record<MarketingChannel, number>;
 }
 
 export interface ChannelPreferences {
-  preferred: string[];
-  avoided: string[];
+  preferred: MarketingChannel[];
+  avoided: MarketingChannel[];
 }
 
 export type MarketingChannel = 
