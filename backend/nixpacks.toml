@@ -1,14 +1,17 @@
 [phases.setup]
-nixPkgs = ["python311", "pip", "gcc", "curl"]
+nixPkgs = ["python311", "pip"]
 
 [phases.install]
 cmds = [
     "pip install --upgrade pip",
-    "pip install -r requirements-railway.txt"
+    "pip install -r requirements.txt"
 ]
 
 [phases.build]
-cmds = ["echo 'Build complete'"]
+cmds = [
+    "mkdir -p models storage",
+    "echo 'Railway build complete'"
+]
 
 [start]
 cmd = "python main.py"
@@ -16,4 +19,4 @@ cmd = "python main.py"
 [variables]
 PYTHONPATH = "/app"
 PYTHONUNBUFFERED = "1"
-NIXPACKS_PYTHON_VERSION = "3.11"
+RAILWAY_ENVIRONMENT = "production"

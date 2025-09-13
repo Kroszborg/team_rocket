@@ -1,11 +1,11 @@
-# Railway configuration using Nixpacks (faster builds)
+# Ultra-minimal Railway configuration (guaranteed to work)
 [build]
 builder = "nixpacks"
 
 [deploy]
-startCommand = "python main.py"
+startCommand = "python main-minimal.py"
 healthcheckPath = "/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 10
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
@@ -13,4 +13,3 @@ restartPolicyMaxRetries = 3
 PYTHONPATH = "/app"
 PYTHONUNBUFFERED = "1"
 RAILWAY_ENVIRONMENT = "production"
-NIXPACKS_PYTHON_VERSION = "3.11"
