@@ -8,6 +8,7 @@ import {
 } from "@/lib/types";
 import { ExportData, shareResults } from "@/lib/export";
 import { ArrowLeft, Download, Share2, RefreshCw } from "lucide-react";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface ResultsHeaderProps {
   campaign: Campaign | null;
@@ -17,7 +18,7 @@ interface ResultsHeaderProps {
   setIsSharing: (value: boolean) => void;
   isRegenerating: boolean;
   regenerateResults: () => void;
-  router: any;
+  router: AppRouterInstance;
 }
 
 export function ResultsHeader({

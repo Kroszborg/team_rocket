@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
 import { Plus, X } from "lucide-react";
 import { CampaignFormData } from "../hooks/use-campaign-form";
 

@@ -60,23 +60,23 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-delay-2 px-4">
-              <Link href="/campaign/new">
+              <Link href="/register">
                 <Button
                   size="lg"
                   className="text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-6 h-12 sm:h-14 w-full sm:w-auto shadow-lg hover:shadow-2xl transition-all duration-300 group"
                 >
                   <Zap className="mr-2 sm:mr-3 h-5 sm:h-6 w-5 sm:w-6 group-hover:scale-110 transition-transform" />
-                  Create Your First Campaign
+                  Get Started Free
                 </Button>
               </Link>
-              <Link href="/creative-tester">
+              <Link href="/campaign/new">
                 <Button
                   size="lg"
                   variant="outline"
                   className="text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-6 h-12 sm:h-14 w-full sm:w-auto border-2 hover:border-primary/50 transition-all duration-300 group"
                 >
-                  <Lightbulb className="mr-2 sm:mr-3 h-5 sm:h-6 w-5 sm:w-6 group-hover:scale-110 transition-transform" />
-                  Test Ad Copy
+                  <Target className="mr-2 sm:mr-3 h-5 sm:h-6 w-5 sm:w-6 group-hover:scale-110 transition-transform" />
+                  Try Demo
                 </Button>
               </Link>
             </div>
@@ -274,13 +274,13 @@ export default function Home() {
                 simulation in under 5 minutes.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
-                <Link href="/campaign/new">
+                <Link href="/register">
                   <Button
                     size="lg"
                     className="text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-6 h-12 sm:h-14 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
                   >
                     <Zap className="mr-2 h-4 sm:h-5 w-4 sm:w-5" />
-                    Launch Campaign Lab
+                    Start Free Trial
                   </Button>
                 </Link>
                 <div className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground">

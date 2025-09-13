@@ -1,12 +1,14 @@
 [build]
-builder = "nixpacks"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile.railway"
 
 [deploy]
-startCommand = "python main.py"
 healthcheckPath = "/health"
 healthcheckTimeout = 30
-restartPolicyType = "always"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
 
 [env]
 PYTHONPATH = "/app"
 PYTHONUNBUFFERED = "1"
+RAILWAY_ENVIRONMENT = "production"

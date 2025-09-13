@@ -90,9 +90,16 @@ async def global_exception_handler(request, exc):
 
 if __name__ == "__main__":
     import uvicorn
+
+    # Railway deployment optimization
+    port = int(os.getenv("PORT", 8000))
+    is_railway = os.getenv("RAILWAY_ENVIRONMENT") is not None
+
     uvicorn.run(
-        "main:app", 
-        host="0.0.0.0", 
-        port=int(os.getenv("PORT", 8000)),
-        reload=True
+        "main:app",
+        host="0.0.0.0",
+        port=port,
+        reload=False if is_railway else True,  # Disable reload in Railway for better performance
+        workers=1,  # Railway works better with single worker
+        log_level="info"
     )

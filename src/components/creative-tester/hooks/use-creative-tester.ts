@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Creative, CreativeScore, MarketingChannel } from '@/lib/types';
+import { Creative, CreativeScore } from '@/lib/types';
 
 export function useCreativeTester() {
   const router = useRouter();

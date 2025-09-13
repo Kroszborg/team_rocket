@@ -1,0 +1,26 @@
+# Core FastAPI dependencies for Railway
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.2
+pydantic-settings==2.1.0
+python-multipart==0.0.6
+python-json-logger==2.0.7
+
+# Essential ML dependencies (pre-compiled versions)
+numpy==1.24.3
+pandas==2.1.4
+scikit-learn==1.3.2
+lightgbm==4.1.0
+joblib==1.3.2
+
+# Utilities
+requests==2.31.0
+
+# Authentication
+supabase==2.3.4
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Optional: If you need sentence transformers later, you can add:
+# sentence-transformers==2.2.2
+# transformers==4.36.2

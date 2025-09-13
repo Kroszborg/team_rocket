@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Creative } from "@/lib/types";
 import { CheckCircle, Copy, Lightbulb, TrendingUp } from "lucide-react";
 
 interface SuggestionsListProps {
@@ -19,13 +18,6 @@ export function SuggestionsList({
   onApply,
 }: SuggestionsListProps) {
   if (suggestions.length === 0) return null;
-
-  const parseSuggestion = (suggestion: string) => {
-    const parts = suggestion.split(" - ");
-    return parts.length === 2
-      ? { title: parts[0], description: parts[1] }
-      : { title: suggestion };
-  };
 
   return (
     <Card>

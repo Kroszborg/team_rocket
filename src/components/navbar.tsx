@@ -12,7 +12,16 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   BarChart3,
   Menu,
@@ -20,11 +29,17 @@ import {
   Lightbulb,
   PlusCircle,
   Sparkles,
+  User,
+  LogOut,
+  Settings,
+  History,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Navbar() {
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -92,35 +107,121 @@ export function Navbar() {
               >
                 Creative Tester
               </Link>
-              <Link
-                href="/campaigns"
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === "/campaigns"
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                )}
-              >
-                Campaigns
-              </Link>
+              {user && (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className={cn(
+                      "text-sm font-medium transition-colors hover:text-primary",
+                      pathname === "/dashboard"
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/campaigns"
+                    className={cn(
+                      "text-sm font-medium transition-colors hover:text-primary",
+                      pathname === "/campaigns"
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    My Campaigns
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         </div>
 
         {/* Right Side - Actions */}
         <div className="flex items-center space-x-3">
-          {/* Quick Action Button */}
-          <div className="hidden lg:flex items-center">
-            <Link href="/campaign/new">
-              <Button size="sm" className="h-9 px-4">
-                <PlusCircle className="h-4 w-4 mr-2" />
-                New Campaign
-              </Button>
-            </Link>
-          </div>
-
           {/* Theme Toggle */}
           <ModeToggle />
+
+          {user ? (
+            <>
+              {/* Quick Action Button for authenticated users */}
+              <div className="hidden lg:flex items-center">
+                <Link href="/campaign/new">
+                  <Button size="sm" className="h-9 px-4">
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    New Campaign
+                  </Button>
+                </Link>
+              </div>
+
+              {/* User Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="relative h-10 w-10 rounded-full">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={undefined} alt={user.full_name || user.email} />
+                      <AvatarFallback>
+                        {(user.full_name || user.email || 'U').substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.full_name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="w-full cursor-pointer">
+                      <BarChart3 className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/campaigns" className="w-full cursor-pointer">
+                      <History className="mr-2 h-4 w-4" />
+                      <span>My Campaigns</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="w-full cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Profile Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut} className="cursor-pointer text-red-600 focus:text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <>
+              {/* Login/Signup buttons for non-authenticated users */}
+              <div className="hidden sm:flex items-center space-x-2">
+                <Link href="/login">
+                  <Button variant="outline" size="sm" className="h-9">
+                    <User className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm" className="h-9">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
 
           {/* Mobile Menu */}
           <div className="md:hidden">
@@ -169,18 +270,85 @@ export function Navbar() {
                       <Lightbulb className="h-4 w-4 text-primary" />
                       <span>Creative Tester</span>
                     </Link>
-                    <Link
-                      href="/campaigns"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
-                        pathname === "/campaigns" && "bg-accent"
-                      )}
-                    >
-                      <BarChart3 className="h-4 w-4 text-primary" />
-                      <span>Campaigns</span>
-                    </Link>
+                    
+                    {user ? (
+                      <>
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                            pathname === "/dashboard" && "bg-accent"
+                          )}
+                        >
+                          <BarChart3 className="h-4 w-4 text-primary" />
+                          <span>Dashboard</span>
+                        </Link>
+                        <Link
+                          href="/campaigns"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                            pathname === "/campaigns" && "bg-accent"
+                          )}
+                        >
+                          <History className="h-4 w-4 text-primary" />
+                          <span>My Campaigns</span>
+                        </Link>
+                        <Link
+                          href="/profile"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                            pathname === "/profile" && "bg-accent"
+                          )}
+                        >
+                          <Settings className="h-4 w-4 text-primary" />
+                          <span>Profile</span>
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          href="/login"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                            pathname === "/login" && "bg-accent"
+                          )}
+                        >
+                          <User className="h-4 w-4 text-primary" />
+                          <span>Sign In</span>
+                        </Link>
+                        <Link
+                          href="/register"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={cn(
+                            "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50 bg-primary text-primary-foreground",
+                            pathname === "/register" && "bg-primary/80"
+                          )}
+                        >
+                          <Sparkles className="h-4 w-4" />
+                          <span>Get Started</span>
+                        </Link>
+                      </>
+                    )}
                   </div>
+                  
+                  {user && (
+                    <div className="border-t pt-4">
+                      <button
+                        onClick={() => {
+                          signOut();
+                          setMobileMenuOpen(false);
+                        }}
+                        className="flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50 text-red-600 w-full"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>

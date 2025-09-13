@@ -1,7 +1,5 @@
 import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
 import { Check, Target, Users, DollarSign, Zap } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 export interface Step {
   number: number;

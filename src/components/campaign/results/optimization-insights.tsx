@@ -12,10 +12,12 @@ import {
 
 interface OptimizationInsightsProps {
   optimization: OptimizationSuggestion[];
+  onStartOptimizing?: () => void;
 }
 
 export function OptimizationInsights({
   optimization,
+  onStartOptimizing,
 }: OptimizationInsightsProps) {
   const getImpactLevel = (impact: {
     roi_increase: number;
@@ -136,6 +138,9 @@ export function OptimizationInsights({
                       size="sm"
                       variant="outline"
                       className="border-green-300 text-green-700 hover:bg-green-100 dark:border-green-700 dark:text-green-400"
+                      onClick={() => {
+                        alert(`Applying suggestion: "${suggestion.title}"\n\nThis will create a new optimized campaign with this suggestion applied. Coming soon!`);
+                      }}
                     >
                       Apply <ArrowRight className="h-3 w-3 ml-1" />
                     </Button>
@@ -189,6 +194,9 @@ export function OptimizationInsights({
                         size="sm"
                         variant="default"
                         className="h-8 px-2 text-xs"
+                        onClick={() => {
+                          alert(`Learning about: "${suggestion.title}"\n\n${suggestion.description}\n\nDetailed optimization guides coming soon!`);
+                        }}
                       >
                         Learn More
                       </Button>
@@ -222,7 +230,13 @@ export function OptimizationInsights({
                 </span>
               </p>
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={onStartOptimizing || (() => {
+                // Default behavior - show a helpful message
+                alert('This feature will apply the optimization suggestions to create a new optimized campaign. Coming soon!');
+              })}
+            >
               Start Optimizing
             </Button>
           </div>

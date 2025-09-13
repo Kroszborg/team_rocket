@@ -25,8 +25,19 @@ export function useCampaignResults() {
         console.log(`Fetching results for campaign ${params.id}, attempt ${attempt + 1}`);
         
         const response = await fetch(`/api/campaigns/${params.id}/results`);
-        const data = await response.json();
-        
+
+        if (!response.ok && response.status !== 202) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (parseError) {
+          console.error('Failed to parse response JSON:', parseError);
+          throw new Error('Invalid response format from server');
+        }
+
         console.log('Results API Response:', data);
         
         if (data.success) {
@@ -37,15 +48,20 @@ export function useCampaignResults() {
           setLoading(false);
         } else {
           // If campaign not found and we haven't retried too many times
-          if ((data.error === 'Campaign not found' || response.status === 404) && attempt < 3) {
+          if ((data?.error === 'Campaign not found' || response.status === 404) && attempt < 3) {
             console.log(`Campaign not found, retrying in 2 seconds... (attempt ${attempt + 1}/3)`);
             setTimeout(() => {
               fetchResults(attempt + 1);
             }, 2000);
           } else {
-            setError(data.error || data.message || 'Failed to load results');
+            const errorMessage = data?.error || data?.message || 'Failed to load results';
+            setError(errorMessage);
             setLoading(false);
-            console.error('API Error:', data);
+            console.error('API Error:', {
+              response_status: response.status,
+              response_data: data || 'No data received',
+              campaign_id: params.id
+            });
           }
         }
       } catch (err) {
