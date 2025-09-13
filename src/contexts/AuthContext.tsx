@@ -1,167 +1,103 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session, AuthError } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { apiClient } from '@/lib/api' // Import our new API client
+import { AuthApiResponse, LoginResponse, RegisterResponse, BackendUser } from '@/lib/types'
 
+// 1. Define the User object based on our backend's response
+// The BackendUser interface is now imported from @/lib/types and no longer defined here.
+
+// 2. Update the context type for the new auth flow
 interface AuthContextType {
-  user: User | null
-  session: Session | null
+  user: BackendUser | null
   loading: boolean
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ error: AuthError | null }>
-  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
-  signOut: () => Promise<void>
-  resetPassword: (email: string) => Promise<{ error: AuthError | null }>
+  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  signUp: (email: string, password: string, fullName?: string) => Promise<{ success: boolean; error?: string }>
+  signOut: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
+  // 3. Update state variables to hold backend user and token
+  const [user, setUser] = useState<BackendUser | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    // Get initial session
-    const getInitialSession = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession()
-        if (error) {
-          console.error('Error getting session:', error)
-        } else {
-          setSession(session)
-          setUser(session?.user ?? null)
-        }
-      } catch (error) {
-        console.error('Error getting initial session:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    getInitialSession()
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.email)
-        
-        setSession(session)
-        setUser(session?.user ?? null)
-        setLoading(false)
-
-        // Handle different auth events
-        if (event === 'SIGNED_IN') {
-          // User signed in
-          router.push('/dashboard')
-        } else if (event === 'SIGNED_OUT') {
-          // User signed out
-          router.push('/')
-        } else if (event === 'TOKEN_REFRESHED') {
-          // Token was refreshed
-          console.log('Token refreshed')
-        }
-      }
-    )
-
-    return () => {
-      subscription?.unsubscribe()
-    }
-  }, [router])
-
-  const signUp = async (email: string, password: string, fullName?: string) => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName
+    const loadUserFromStorage = async () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          apiClient.setAuthToken(token);
+          const data: AuthApiResponse = await apiClient.getMe();
+          if (data.success) {
+            setUser(data.user);
           }
-        }
-      })
-
-      if (!error && data.user) {
-        // Create user profile
-        const { error: profileError } = await supabase
-          .from('user_profiles')
-          .insert({
-            id: data.user.id,
-            full_name: fullName,
-            preferences: {}
-          })
-
-        if (profileError) {
-          console.error('Error creating user profile:', profileError)
+        } catch (err) {
+          // Token is invalid or expired
+          console.error('Session restore error:', err)
+          localStorage.removeItem('authToken');
+          apiClient.setAuthToken(null);
         }
       }
+      setLoading(false);
+    };
 
-      return { error }
-    } catch (error) {
-      console.error('Sign up error:', error)
-      return { error: error as AuthError }
-    } finally {
-      setLoading(false)
-    }
-  }
+    loadUserFromStorage();
+  }, []);
 
   const signIn = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      setLoading(true)
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      })
-      return { error }
-    } catch (error) {
-      console.error('Sign in error:', error)
-      return { error: error as AuthError }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const signOut = async () => {
-    try {
-      setLoading(true)
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        console.error('Sign out error:', error)
+      const data: LoginResponse = await apiClient.login({ email, password });
+      if (data.success && data.access_token) {
+        localStorage.setItem('authToken', data.access_token);
+        apiClient.setAuthToken(data.access_token);
+        setUser(data.user);
+        router.push('/dashboard');
+        return { success: true };
       }
-      // Clear local state
-      setUser(null)
-      setSession(null)
-    } catch (error) {
-      console.error('Sign out error:', error)
+      return { success: false, error: data.error || 'Login failed' };
+    } catch (error: any) {
+      return { success: false, error: error.message || 'An unexpected error occurred' };
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const resetPassword = async (email: string) => {
+  const signUp = async (email: string, password: string, fullName?: string) => {
+    setLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`
-      })
-      return { error }
-    } catch (error) {
-      console.error('Reset password error:', error)
-      return { error: error as AuthError }
+      const data: RegisterResponse = await apiClient.register({ email, password, full_name: fullName });
+      if (data.success) {
+        // Optionally, redirect to login or show a success message
+        return { success: true };
+      }
+      return { success: false, error: data.error || 'Registration failed' };
+    } catch (error: any) {
+      return { success: false, error: error.message || 'An unexpected error occurred' };
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+
+  const signOut = () => {
+    setUser(null);
+    localStorage.removeItem('authToken');
+    apiClient.setAuthToken(null);
+    router.push('/login');
+    // No need to call backend logout as we are clearing client-side session
+  };
 
   const value = {
     user,
-    session,
     loading,
-    signUp,
     signIn,
+    signUp,
     signOut,
-    resetPassword
-  }
+  };
 
   return (
     <AuthContext.Provider value={value}>

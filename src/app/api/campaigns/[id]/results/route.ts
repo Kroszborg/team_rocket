@@ -89,7 +89,7 @@ export async function POST(
     const { runCampaignSimulation, generateOptimizationSuggestions } = await import('@/lib/simulation');
     
     const simulationResults = runCampaignSimulation(campaign);
-    const optimizationSuggestions = generateOptimizationSuggestions(campaign, simulationResults);
+    const optimizationSuggestions = await generateOptimizationSuggestions(campaign, simulationResults);
     
     // Store updated results
     storage.saveResults(id, campaign, simulationResults, optimizationSuggestions);

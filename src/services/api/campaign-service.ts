@@ -38,6 +38,8 @@ export class CampaignService {
     return {
       id: this.generateCampaignId(),
       name: campaignData.name.trim(),
+      status: 'draft', // Default status for a new campaign
+      created_at: new Date().toISOString(), // Set creation date
       product: {
         ...campaignData.product,
         name: campaignData.product.name.trim(),
@@ -48,9 +50,9 @@ export class CampaignService {
         interests: campaignData.targeting.interests.map(i => i.trim()).filter(i => i.length > 0),
         location: campaignData.targeting.location.map(l => l.trim()).filter(l => l.length > 0),
       },
-      budget: campaignData.budget as any,
-      channels: campaignData.channels as any,
-      creatives: (campaignData.creatives || []) as any,
+      budget: campaignData.budget,
+      channels: campaignData.channels,
+      creatives: (campaignData.creatives || []),
       createdAt: new Date(),
     };
   }
@@ -81,7 +83,7 @@ export class CampaignService {
     try {
       simulationResults = runCampaignSimulation(campaign);
       optimizationSuggestions = await generateOptimizationSuggestions(campaign, simulationResults);
-    } catch (error) {
+    } catch {
       throw new SimulationError('Failed to run campaign simulation', campaign.id);
     }
     

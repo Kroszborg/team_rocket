@@ -1,5 +1,18 @@
 import { z } from 'zod';
 
+const marketingChannelSchema = z.enum([
+  'facebook',
+  'instagram', 
+  'google-ads',
+  'tiktok',
+  'youtube',
+  'linkedin',
+  'twitter',
+  'email',
+  'seo',
+  'influencer'
+]);
+
 export const campaignSchema = z.object({
   name: z.string().min(1, 'Campaign name is required').max(100, 'Campaign name too long'),
   product: z.object({
@@ -22,18 +35,18 @@ export const campaignSchema = z.object({
   budget: z.object({
     total: z.number().positive('Budget must be positive').max(1000000, 'Budget too large'),
     duration: z.number().positive('Duration must be positive').max(365, 'Duration cannot exceed 365 days'),
-    channels: z.record(z.string(), z.number().min(0)),
+    channels: z.record(marketingChannelSchema, z.number().min(0)),
   }),
   channels: z.object({
-    preferred: z.array(z.string()),
-    avoided: z.array(z.string()),
+    preferred: z.array(marketingChannelSchema),
+    avoided: z.array(marketingChannelSchema),
   }),
   creatives: z.array(z.object({
     id: z.string(),
     title: z.string(),
     description: z.string(),
     callToAction: z.string(),
-    channel: z.string(),
+    channel: marketingChannelSchema,
   })).optional(),
 });
 

@@ -13,7 +13,7 @@ function DashboardPage() {
 
   useEffect(() => {
     fetchCampaigns()
-  }, [])
+  }, [fetchCampaigns])
 
   const handleDeleteCampaign = async (campaignId: string, campaignName: string) => {
     if (confirm(`Are you sure you want to delete "${campaignName}"?`)) {
@@ -52,7 +52,7 @@ function DashboardPage() {
           <div className="flex justify-between items-center py-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {user?.user_metadata?.full_name || user?.email}!
+                Welcome back, {user?.full_name || user?.email}!
               </h1>
               <p className="text-gray-600 mt-1">Manage your campaigns and track performance</p>
             </div>
@@ -99,7 +99,7 @@ function DashboardPage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Total Campaigns</h3>
                 <p className="text-2xl font-bold text-blue-600">
-                  {statsLoading ? '...' : stats?.total_campaigns || 0}
+                  {statsLoading ? '...' : stats?.totalCampaigns || 0}
                 </p>
               </div>
             </div>
@@ -115,7 +115,7 @@ function DashboardPage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Creative Tests</h3>
                 <p className="text-2xl font-bold text-purple-600">
-                  {statsLoading ? '...' : stats?.total_creative_tests || 0}
+                  {statsLoading ? '...' : stats?.totalCreatives || 0}
                 </p>
               </div>
             </div>
@@ -131,7 +131,7 @@ function DashboardPage() {
               <div className="ml-4">
                 <h3 className="text-lg font-medium text-gray-900">Member Since</h3>
                 <p className="text-2xl font-bold text-green-600">
-                  {statsLoading ? '...' : stats?.member_since || '2024'}
+                  {statsLoading ? '...' : stats?.memberSince || '2024'}
                 </p>
               </div>
             </div>
@@ -193,11 +193,11 @@ function DashboardPage() {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                           <div>
                             <span className="text-gray-600">Product:</span>
-                            <p className="font-medium">{campaign.product_data?.name || 'N/A'}</p>
+                            <p className="font-medium">{campaign.product?.name || 'N/A'}</p>
                           </div>
                           <div>
                             <span className="text-gray-600">Budget:</span>
-                            <p className="font-medium">{formatCurrency(campaign.budget_data?.total || 0)}</p>
+                            <p className="font-medium">{formatCurrency(campaign.budget?.total || 0)}</p>
                           </div>
                           <div>
                             <span className="text-gray-600">Expected ROI:</span>

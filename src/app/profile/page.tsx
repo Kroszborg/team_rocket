@@ -1,276 +1,164 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import { useEffect, useState } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useAuth, withAuth } from '@/contexts/AuthContext'
-import { supabase } from '@/lib/supabase'
-import Link from 'next/link'
+import { apiClient } from '@/lib/api'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { toast } from 'sonner'
+
+interface ProfileData {
+  full_name: string;
+  company?: string;
+  role?: string;
+}
+
+const profileSchema = z.object({
+  full_name: z.string().min(1, 'Full name is required'),
+  company: z.string().optional(),
+  role: z.string().optional(),
+})
+
+type ProfileFormValues = z.infer<typeof profileSchema>
 
 function ProfilePage() {
   const { user, signOut } = useAuth()
-  const [loading, setLoading] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [profile, setProfile] = useState({
-    full_name: '',
-    company: '',
-    role: ''
+  const [isLoading, setIsLoading] = useState(true)
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      full_name: '',
+      company: '',
+      role: '',
+    },
   })
-  const [message, setMessage] = useState('')
+
+  const { isSubmitting } = form.formState
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      setIsLoading(true)
+      try {
+        const profileData: ProfileData = await apiClient.getProfile()
+        if (profileData) {
+          form.reset({
+            full_name: profileData.full_name || user?.full_name || '',
+            company: profileData.company || '',
+            role: profileData.role || '',
+          })
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile', error)
+        toast.error('Failed to load your profile data.')
+        // Set form defaults from auth context if API fails
+        form.reset({ full_name: user?.full_name || '' })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     if (user) {
-      loadProfile()
+      fetchProfile()
     }
-  }, [user])
+  }, [user, form])
 
-  const loadProfile = async () => {
+  const onSubmit = async (values: ProfileFormValues) => {
     try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('full_name, company, role')
-        .eq('id', user?.id)
-        .single()
-
-      if (error && error.code === 'PGRST116') {
-        // No profile found, use user metadata
-        setProfile({
-          full_name: user?.user_metadata?.full_name || '',
-          company: '',
-          role: ''
-        })
-      } else if (error) {
-        console.error('Error loading profile:', error)
-      } else if (data) {
-        setProfile({
-          full_name: data.full_name || '',
-          company: data.company || '',
-          role: data.role || ''
-        })
-      }
+      await apiClient.updateProfile(values)
+      toast.success('Your profile has been updated.')
     } catch (error) {
-      console.error('Error loading profile:', error)
-    } finally {
-      setLoading(false)
+      console.error('Failed to update profile', error)
+      toast.error('Failed to update your profile.')
     }
   }
 
-  const updateProfile = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
-    setMessage('')
-
-    try {
-      const { error } = await supabase
-        .from('user_profiles')
-        .upsert({
-          id: user?.id,
-          full_name: profile.full_name,
-          company: profile.company,
-          role: profile.role,
-          updated_at: new Date().toISOString()
-        })
-
-      if (error) {
-        throw error
-      }
-
-      setMessage('Profile updated successfully!')
-    } catch (error) {
-      console.error('Error updating profile:', error)
-      setMessage('Error updating profile. Please try again.')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      <div className="flex min-h-screen items-center justify-center">
+        <LoadingSpinner />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
-              <p className="text-gray-600 mt-1">Manage your account information</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link 
-                href="/dashboard"
-                className="text-gray-600 hover:text-gray-900 font-medium"
-              >
-                ← Back to Dashboard
-              </Link>
-              <button
-                onClick={signOut}
-                className="text-gray-600 hover:text-gray-900 font-medium"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="container mx-auto max-w-3xl py-8 px-4">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
+        <p className="text-muted-foreground">Manage your account settings and personal information.</p>
+      </header>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow">
-          {/* Account Info Section */}
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Account Information</h2>
-          </div>
-          
-          <div className="p-6">
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={user?.email || ''}
-                disabled
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500 cursor-not-allowed"
-              />
-              <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
-            </div>
-
-            <form onSubmit={updateProfile} className="space-y-6">
-              <div>
-                <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
-                </label>
-                <input
-                  id="full_name"
-                  type="text"
-                  value={profile.full_name}
-                  onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your full name"
-                />
+      <div className="grid gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Personal Information</CardTitle>
+            <CardDescription>Update your personal details here.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={user?.email || ''} disabled className="cursor-not-allowed" />
               </div>
-
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-                  Company
-                </label>
-                <input
-                  id="company"
-                  type="text"
-                  value={profile.company}
-                  onChange={(e) => setProfile({ ...profile, company: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your company name"
-                />
+              <div className="grid gap-2">
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input id="fullName" {...form.register('full_name')} disabled={isSubmitting} />
+                {form.formState.errors.full_name && (
+                  <p className="text-sm text-red-500">{form.formState.errors.full_name.message}</p>
+                )}
               </div>
-
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                  Role
-                </label>
-                <select
-                  id="role"
-                  value={profile.role}
-                  onChange={(e) => setProfile({ ...profile, role: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select your role</option>
-                  <option value="Marketing Manager">Marketing Manager</option>
-                  <option value="Digital Marketer">Digital Marketer</option>
-                  <option value="Campaign Manager">Campaign Manager</option>
-                  <option value="Performance Marketer">Performance Marketer</option>
-                  <option value="Growth Marketer">Growth Marketer</option>
-                  <option value="Marketing Director">Marketing Director</option>
-                  <option value="Entrepreneur">Entrepreneur</option>
-                  <option value="Agency Owner">Agency Owner</option>
-                  <option value="Consultant">Consultant</option>
-                  <option value="Student">Student</option>
-                  <option value="Other">Other</option>
-                </select>
+              <div className="grid gap-2">
+                <Label htmlFor="company">Company</Label>
+                <Input id="company" {...form.register('company')} disabled={isSubmitting} placeholder="Your company name" />
               </div>
-
-              {message && (
-                <div className={`p-3 rounded-md ${
-                  message.includes('successfully') 
-                    ? 'bg-green-50 text-green-800 border border-green-200' 
-                    : 'bg-red-50 text-red-800 border border-red-200'
-                }`}>
-                  {message}
-                </div>
-              )}
-
-              <div className="flex items-center justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={loadProfile}
-                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-200"
-                >
-                  Reset
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-md transition duration-200 flex items-center"
-                >
-                  {saving ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Saving...
-                    </>
-                  ) : (
-                    'Save Changes'
-                  )}
-                </button>
+              <div className="grid gap-2">
+                <Label htmlFor="role">Role</Label>
+                <Select onValueChange={(value) => form.setValue('role', value)} value={form.watch('role')} disabled={isSubmitting}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
+                    <SelectItem value="digital-marketer">Digital Marketer</SelectItem>
+                    <SelectItem value="campaign-manager">Campaign Manager</SelectItem>
+                    <SelectItem value="entrepreneur">Entrepreneur</SelectItem>
+                    <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex justify-end">
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <LoadingSpinner className="mr-2 h-4 w-4" />} Save Changes
+                </Button>
               </div>
             </form>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* Account Actions */}
-        <div className="bg-white rounded-lg shadow mt-6">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Account Actions</h2>
-          </div>
-          
-          <div className="p-6 space-y-4">
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
+        <Card>
+          <CardHeader>
+            <CardTitle>Account Actions</CardTitle>
+            <CardDescription>Manage your account.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between rounded-lg border p-4">
               <div>
-                <h3 className="font-medium text-gray-900">Reset Password</h3>
-                <p className="text-sm text-gray-600">Change your account password</p>
+                <h3 className="font-medium">Sign Out</h3>
+                <p className="text-sm text-muted-foreground">Sign out of your account on this device.</p>
               </div>
-              <button
-                onClick={() => {
-                  // This would typically open a modal or redirect to reset password flow
-                  alert('Password reset functionality would be implemented here')
-                }}
-                className="px-4 py-2 text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50 transition duration-200"
-              >
-                Reset Password
-              </button>
+              <Button variant="outline" onClick={signOut}>Sign Out</Button>
             </div>
-            
-            <div className="flex items-center justify-between py-3">
-              <div>
-                <h3 className="font-medium text-gray-900">Sign Out</h3>
-                <p className="text-sm text-gray-600">Sign out of your account</p>
-              </div>
-              <button
-                onClick={signOut}
-                className="px-4 py-2 text-red-600 border border-red-600 rounded-md hover:bg-red-50 transition duration-200"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

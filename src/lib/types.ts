@@ -1,11 +1,14 @@
 export interface Campaign {
   id: string;
   name: string;
+  status: string;
+  created_at: string;
   product: ProductDetails;
   targeting: TargetDemographics;
   budget: BudgetAllocation;
   channels: ChannelPreferences;
   creatives: Creative[];
+  optimization_results?: any; // TODO: Define this type
   createdAt: Date;
 }
 
@@ -31,9 +34,7 @@ export interface TargetDemographics {
 export interface BudgetAllocation {
   total: number;
   duration: number; // days
-  channels: {
-    [key in MarketingChannel]: number;
-  };
+  channels: Record<MarketingChannel, number>;
 }
 
 export interface ChannelPreferences {
@@ -59,6 +60,7 @@ export interface Creative {
   description: string;
   callToAction: string;
   channel: MarketingChannel;
+  created_at?: string;
   score?: CreativeScore;
 }
 
@@ -113,4 +115,95 @@ export interface OptimizationSuggestion {
     amount?: number;
     creative_changes?: string[];
   };
+}
+
+// --- API Data Types ---
+
+export interface RegisterData {
+  email: string;
+  password?: string;
+  full_name?: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password?: string;
+}
+
+export interface ProfileData {
+  full_name: string;
+  company?: string;
+  role?: string;
+}
+
+export interface CampaignData {
+  // Define the shape for creating a new campaign
+  name: string;
+  // Add other properties as needed
+}
+
+export interface CreativeData {
+  // Define the shape for scoring a creative
+  [key: string]: any; // Placeholder
+}
+
+export interface OptimizationData {
+  // Define the shape for campaign optimization
+  [key: string]: any; // Placeholder
+}
+
+// --- API Response Types ---
+
+export interface AuthApiResponse {
+  success: boolean;
+  user?: any; // Define user type later
+  error?: string;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  access_token: string;
+  user: BackendUser;
+  error?: string;
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  error?: string;
+}
+
+export interface CampaignsResponse {
+  campaigns: Campaign[];
+}
+
+export interface CampaignDetailResponse {
+  campaign: Campaign;
+}
+
+export interface CreativeHistoryResponse {
+  tests: Creative[];
+}
+
+export interface HealthCheckResponse {
+  status: string;
+}
+
+export interface MLHealthCheckResponse {
+  models?: { models_loaded?: boolean };
+}
+
+export interface UserStats {
+  totalCampaigns: number;
+  totalCreatives: number;
+  memberSince: string;
+}
+
+export interface UserStatsResponse {
+  stats: UserStats;
+}
+
+export interface BackendUser {
+  id: string;
+  email: string;
+  full_name?: string;
 }
