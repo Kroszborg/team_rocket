@@ -15,7 +15,9 @@
       "Bash(.run-docker.bat)",
       "Bash(docker-compose up:*)",
       "Bash(docker-compose:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find:*)",
+      "Bash(comm:*)"
     ],
     "deny": [],
     "ask": []
