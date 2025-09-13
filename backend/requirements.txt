@@ -21,6 +21,9 @@ google-generativeai==0.8.3
 # Additional dependencies for full functionality
 lightgbm==4.1.0
 sentence-transformers==2.2.2
+transformers==4.56.1
+torch==2.1.2
+safetensors==0.4.5
 
 # For health checks in Docker
 requests

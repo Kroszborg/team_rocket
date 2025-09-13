@@ -19,7 +19,9 @@ export function ScoreDisplay({ score }: ScoreDisplayProps) {
           <TrendingUp className="h-5 w-5" />
           Creative Performance Score
         </CardTitle>
-        <CardDescription>AI-powered analysis of your ad copy effectiveness</CardDescription>
+        <CardDescription>
+          AI-powered analysis using DistilBERT ML model and semantic analysis
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center relative">

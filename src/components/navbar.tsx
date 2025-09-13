@@ -72,7 +72,6 @@ export function Navbar() {
               <div className="flex items-center gap-2">
                 <span className="font-bold text-lg text-foreground">Adsim</span>
                 <Badge variant="secondary" className="text-xs px-2 py-0.5 h-5">
-                  <Sparkles className="h-2 w-2 mr-1" />
                   MVP
                 </Badge>
               </div>
