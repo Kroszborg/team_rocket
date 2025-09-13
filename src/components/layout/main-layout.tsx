@@ -30,17 +30,16 @@ export function MainLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col font-sans antialiased">
       <Navbar />
 
-      <main className="flex-1 relative overflow-hidden">
-        {/* Enhanced Background Pattern */}
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px] pointer-events-none opacity-40" />
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-transparent to-muted/5 pointer-events-none" />
+      <main className="flex-1 relative">
+        {/* Subtle Background Pattern - Reduced opacity for better readability */}
+        <div className="absolute inset-0 bg-grid-white/[0.01] bg-[size:60px_60px] pointer-events-none opacity-20" />
 
-        {/* Content Container with improved responsive padding */}
+        {/* Content Container with improved contrast and readability */}
         <div className={containerClass || containerVariants[variant]}>
-          <div className="py-6 sm:py-8 lg:py-12">{children}</div>
+          <div className="py-6 sm:py-8 lg:py-12 relative z-10">{children}</div>
         </div>
       </main>
 

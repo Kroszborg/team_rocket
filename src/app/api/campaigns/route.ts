@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CampaignService } from '@/services/api/campaign-service';
-import { handleError } from '@/lib/errors/api-errors';
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,33 +8,73 @@ export async function POST(request: NextRequest) {
       throw new Error('Invalid JSON in request body');
     });
 
-    const result = await CampaignService.processCampaign(rawData);
+    console.log('Forwarding campaign creation to backend:', rawData);
+
+    // Forward request to backend API
+    const response = await fetch(`${BACKEND_URL}/api/campaigns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(rawData),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(result, { status: response.status });
+    }
+
     return NextResponse.json(result);
-    
+
   } catch (error) {
-    const errorResponse = handleError(error);
-    return NextResponse.json(errorResponse, { status: errorResponse.status });
+    console.error('Error in campaign API route:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to process campaign',
+        detail: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const campaignId = searchParams.get('id');
-    const limit = searchParams.get('limit');
-    const offset = searchParams.get('offset');
-    
-    if (campaignId) {
-      const result = CampaignService.getCampaign(campaignId);
-      return NextResponse.json(result);
-    } else {
-      const result = CampaignService.getAllCampaigns(limit || undefined, offset || undefined);
-      return NextResponse.json(result);
+    const urlSearchParams = new URLSearchParams();
+
+    // Forward all search params to backend
+    searchParams.forEach((value, key) => {
+      urlSearchParams.append(key, value);
+    });
+
+    const response = await fetch(`${BACKEND_URL}/api/campaigns?${urlSearchParams.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(result, { status: response.status });
     }
-    
+
+    return NextResponse.json(result);
+
   } catch (error) {
-    const errorResponse = handleError(error);
-    return NextResponse.json(errorResponse, { status: errorResponse.status });
+    console.error('Error in campaign GET API route:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to fetch campaigns',
+        detail: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -42,17 +82,38 @@ export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const campaignId = searchParams.get('id');
-    
+
     if (!campaignId) {
-      const errorResponse = handleError(new Error('Campaign ID is required'));
-      return NextResponse.json(errorResponse, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: 'Campaign ID is required' },
+        { status: 400 }
+      );
     }
-    
-    const result = CampaignService.deleteCampaign(campaignId);
+
+    const response = await fetch(`${BACKEND_URL}/api/campaigns?id=${campaignId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(result, { status: response.status });
+    }
+
     return NextResponse.json(result);
-    
+
   } catch (error) {
-    const errorResponse = handleError(error);
-    return NextResponse.json(errorResponse, { status: errorResponse.status });
+    console.error('Error in campaign DELETE API route:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to delete campaign',
+        detail: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }

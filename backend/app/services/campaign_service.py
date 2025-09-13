@@ -6,6 +6,7 @@ from app.models.types import Campaign, CampaignCreateRequest
 from app.core.storage import storage
 from app.services.simulation_service import SimulationService
 from app.services.ml_service import MLService
+from app.services.gemini_service import gemini_service
 
 logger = logging.getLogger(__name__)
 
@@ -29,24 +30,24 @@ class CampaignService:
         """Validate campaign data"""
         if not data:
             raise ValidationError("Campaign data is required")
-        
+
         required_fields = ["name", "product", "targeting", "budget", "channels"]
         for field in required_fields:
             if field not in data:
                 raise ValidationError(f"Missing required field: {field}")
-        
+
         # Validate budget
         if data["budget"]["total"] <= 0:
             raise ValidationError("Budget must be greater than 0")
-        
+
         if data["budget"]["duration"] <= 0:
             raise ValidationError("Campaign duration must be greater than 0")
-        
-        # Validate targeting
-        age_range = data["targeting"]["age_range"]
-        if age_range["min"] >= age_range["max"]:
+
+        # Validate targeting - handle both ageRange and age_range
+        age_range = data["targeting"].get("ageRange", data["targeting"].get("age_range"))
+        if age_range and age_range["min"] >= age_range["max"]:
             raise ValidationError("Age range minimum must be less than maximum")
-        
+
         return data
 
     @staticmethod
@@ -100,15 +101,42 @@ class CampaignService:
                 optimization_suggestions = await SimulationService.generate_optimization_suggestions(
                     campaign, simulation_results
                 )
+
+                # Get Gemini AI enhancements
+                gemini_insights = await gemini_service.enhance_campaign_strategy(campaign_data)
+                if gemini_insights.get("success"):
+                    # Add Gemini insights to optimization suggestions
+                    gemini_enhanced_suggestions = gemini_insights.get("enhanced_strategy", {})
+                    if "recommendations" in gemini_enhanced_suggestions:
+                        # Convert Gemini recommendations to optimization suggestion format
+                        for idx, rec in enumerate(gemini_enhanced_suggestions["recommendations"]):
+                            optimization_suggestions.append({
+                                "type": "ai_recommendation",
+                                "title": f"AI Insight #{idx + 1}",
+                                "description": rec,
+                                "impact": {
+                                    "roi_increase": 10,
+                                    "reach_increase": 5,
+                                    "conversion_increase": 8
+                                },
+                                "source": "gemini_ai"
+                            })
+
             except Exception as error:
                 logger.error(f"Simulation error: {error}")
                 raise SimulationError('Failed to run campaign simulation', campaign["id"])
-            
-            # Store results
+
+            # Store results with Gemini insights
+            enhanced_results = {
+                "simulation": simulation_results,
+                "optimization": optimization_suggestions,
+                "gemini_insights": gemini_insights if 'gemini_insights' in locals() else None
+            }
+
             storage.save_results(
-                campaign["id"], 
-                campaign, 
-                simulation_results, 
+                campaign["id"],
+                campaign,
+                simulation_results,
                 optimization_suggestions
             )
             

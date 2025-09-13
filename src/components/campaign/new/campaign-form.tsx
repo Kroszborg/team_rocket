@@ -73,9 +73,9 @@ export function CampaignForm() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Create New Campaign</h1>
-        <p className="text-muted-foreground mt-2">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground">Create New Campaign</h1>
+        <p className="text-muted-foreground mt-3 text-lg leading-relaxed max-w-2xl mx-auto">
           Build your virtual marketing campaign and get predictive insights in minutes
         </p>
       </div>
@@ -119,18 +119,18 @@ export function CampaignForm() {
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between items-center pt-6 border-t">
+        <div className="flex justify-between items-center pt-8 border-t border-border/50 mt-8">
           <Button
             variant="outline"
             onClick={prevStep}
             disabled={currentStep === 1}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 h-11 px-6 font-medium"
           >
             <ArrowLeft className="h-4 w-4" />
             Previous
           </Button>
 
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground font-medium bg-muted/30 px-3 py-1 rounded-full">
             Step {currentStep} of 4
           </div>
 
@@ -138,7 +138,7 @@ export function CampaignForm() {
             <Button
               onClick={nextStep}
               disabled={!isStepValid(currentStep)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 h-11 px-6 font-medium"
             >
               Next
               <ArrowRight className="h-4 w-4" />
@@ -147,7 +147,7 @@ export function CampaignForm() {
             <Button
               onClick={handleSubmit}
               disabled={!isStepValid(4)}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+              className="flex items-center gap-2 h-11 px-6 font-medium bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <Zap className="h-4 w-4" />
               Launch Campaign
