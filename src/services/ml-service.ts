@@ -1,7 +1,7 @@
 import { Campaign, OptimizationSuggestion, Creative, CreativeScore } from '@/lib/types';
 
 // ML Service configuration
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+const ML_SERVICE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 interface CampaignOptimizationRequest {
   total_budget: number;
@@ -123,7 +123,7 @@ export async function optimizeCampaignBudget(campaign: Campaign): Promise<{
     target_margin: campaign.product.targetMargin / 100, // Convert percentage to decimal
   };
 
-  const response = await callMLService<CampaignOptimizationResponse>('/api/campaign/optimize', request);
+  const response = await callMLService<CampaignOptimizationResponse>('/api/ml/campaign/optimize', request);
 
   // Convert response to application format
   const channelMapping: Record<string, string> = {
@@ -204,7 +204,7 @@ export async function scoreCreativeWithML(creative: Creative): Promise<CreativeS
     cta: creative.callToAction,
   };
 
-  const response = await callMLService<CreativeScoreResponse>('/api/creative/score', request);
+  const response = await callMLService<CreativeScoreResponse>('/api/ml/creative/score', request);
 
   // Convert ML response to application format
   const score: CreativeScore = {
@@ -255,7 +255,7 @@ export async function generateCreativeImprovements(
     cta,
   };
 
-  const response = await callMLService<CreativeScoreResponse>('/api/creative/score', request);
+  const response = await callMLService<CreativeScoreResponse>('/api/ml/creative/score', request);
 
   return {
     titleSuggestions: response.improvements.title || [],
@@ -268,8 +268,8 @@ export async function generateCreativeImprovements(
 // Health check for ML service
 export async function checkMLServiceHealth(): Promise<boolean> {
   try {
-    const response = await callMLService<{ status: string }>('/health');
-    return response.status === 'healthy';
+    const response = await callMLService<{ status: string }>('/api/ml/health');
+    return response.status === 'healthy' || response.status === 'degraded';
   } catch (error) {
     console.warn('ML Service health check failed:', error);
     return false;

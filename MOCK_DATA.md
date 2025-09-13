@@ -1,4 +1,4 @@
-# Mock Data for Virtual Campaign Lab Testing
+# Mock Data for Adsim Testing
 
 ## Campaign Examples
 
@@ -170,4 +170,4 @@ Test the same product with different copy styles:
 4. **Mix preferred and avoided channels** to see optimization suggestions
 5. **Use the creative tester first** to perfect your ad copy before creating campaigns
 
-Enjoy testing your Virtual Campaign Lab! 🚀
+Enjoy testing your Adsim! 🚀

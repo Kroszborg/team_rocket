@@ -6,14 +6,6 @@ import { useState, useEffect } from "react";
 import { ModeToggle } from "@/components/toggle";
 import { Button } from "@/components/ui/button";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
   Sheet,
   SheetContent,
   SheetTrigger,
@@ -21,36 +13,15 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   BarChart3,
   Menu,
   Target,
   Lightbulb,
-  TrendingUp,
-  Zap,
   PlusCircle,
   Sparkles,
-  BarChart,
-  Users,
-  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const navigation = [
-  {
-    title: "Campaign Lab",
-    href: "/campaign/new",
-    description: "Create and simulate marketing campaigns",
-    icon: Target,
-  },
-  {
-    title: "Creative Tester",
-    href: "/creative-tester",
-    description: "Score and optimize your ad copy",
-    icon: Lightbulb,
-  },
-];
 
 export function Navbar() {
   const pathname = usePathname();
@@ -84,87 +55,72 @@ export function Navbar() {
             </div>
             <div className="hidden sm:block">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-lg bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
-                  Virtual Campaign Lab
-                </span>
+                <span className="font-bold text-lg text-foreground">Adsim</span>
                 <Badge variant="secondary" className="text-xs px-2 py-0.5 h-5">
                   <Sparkles className="h-2 w-2 mr-1" />
                   MVP
                 </Badge>
               </div>
             </div>
-            <span className="sm:hidden font-bold text-lg">VCL</span>
+            <span className="sm:hidden font-bold text-lg text-foreground">
+              Adsim
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex ml-8">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="h-10 px-4 font-medium">
-                    Tools
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid w-[440px] gap-3 p-4 md:w-[520px] md:grid-cols-2">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={cn(
-                            "group grid h-auto w-full items-center justify-start gap-2 rounded-lg border border-border bg-background p-4 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none",
-                            pathname === item.href && "bg-accent"
-                          )}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                              <item.icon className="h-4 w-4 text-primary" />
-                            </div>
-                            <div className="text-sm font-semibold leading-none">
-                              {item.title}
-                            </div>
-                          </div>
-                          <div className="line-clamp-2 text-sm leading-snug text-muted-foreground ml-11">
-                            {item.description}
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <nav className="flex items-center space-x-6">
+              <Link
+                href="/campaign/new"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  pathname === "/campaign/new"
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                Campaign Lab
+              </Link>
+              <Link
+                href="/creative-tester"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  pathname === "/creative-tester"
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                Creative Tester
+              </Link>
+              <Link
+                href="/campaigns"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  pathname === "/campaigns"
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                Campaigns
+              </Link>
+            </nav>
           </div>
         </div>
 
         {/* Right Side - Actions */}
         <div className="flex items-center space-x-3">
-          {/* Quick Action Buttons */}
-          <div className="hidden lg:flex items-center space-x-2">
+          {/* Quick Action Button */}
+          <div className="hidden lg:flex items-center">
             <Link href="/campaign/new">
-              <Button
-                size="sm"
-                className="h-10 px-4 shadow-sm hover:shadow-md transition-all"
-              >
+              <Button size="sm" className="h-9 px-4">
                 <PlusCircle className="h-4 w-4 mr-2" />
                 New Campaign
-              </Button>
-            </Link>
-            <Link href="/creative-tester">
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-10 px-4 hover:bg-accent transition-all"
-              >
-                <Zap className="h-4 w-4 mr-2" />
-                Test Copy
               </Button>
             </Link>
           </div>
 
           {/* Theme Toggle */}
-          <div className="flex items-center">
-            <ModeToggle />
-          </div>
+          <ModeToggle />
 
           {/* Mobile Menu */}
           <div className="md:hidden">
@@ -181,118 +137,49 @@ export function Navbar() {
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                       <BarChart3 className="h-4 w-4 text-primary-foreground" />
                     </div>
-                    <span>Virtual Campaign Lab</span>
+                    <span>Adsim</span>
                     <Badge variant="secondary" className="text-xs">
                       MVP
                     </Badge>
                   </SheetTitle>
                 </SheetHeader>
 
-                <div className="flex flex-col space-y-6 mt-8">
-                  {/* Quick Actions */}
-                  <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                      Quick Actions
-                    </h4>
-                    <div className="grid gap-3">
-                      <Link
-                        href="/campaign/new"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Button
-                          className="w-full justify-start h-12 px-4"
-                          size="sm"
-                        >
-                          <PlusCircle className="h-4 w-4 mr-3" />
-                          <div className="text-left">
-                            <div className="font-medium">New Campaign</div>
-                            <div className="text-xs text-primary-foreground/80">
-                              Create & simulate
-                            </div>
-                          </div>
-                        </Button>
-                      </Link>
-                      <Link
-                        href="/creative-tester"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start h-12 px-4"
-                          size="sm"
-                        >
-                          <Zap className="h-4 w-4 mr-3" />
-                          <div className="text-left">
-                            <div className="font-medium">Test Copy</div>
-                            <div className="text-xs text-muted-foreground">
-                              Score ad text
-                            </div>
-                          </div>
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-
-                  <Separator />
-
+                <div className="flex flex-col space-y-4 mt-8">
                   {/* Navigation Links */}
-                  <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                      Tools
-                    </h4>
-                    <div className="space-y-2">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={cn(
-                            "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
-                            pathname === item.href && "bg-accent"
-                          )}
-                        >
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                            <item.icon className="h-4 w-4 text-primary" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-medium">{item.title}</div>
-                            <div className="text-xs text-muted-foreground leading-tight">
-                              {item.description}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  {/* Stats */}
-                  <div className="bg-muted/30 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-3">
-                      <BarChart className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">
-                        Platform Stats
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div>
-                        <div className="text-xl font-bold text-primary">
-                          10+
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Channels
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-primary">
-                          95%
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Accuracy
-                        </div>
-                      </div>
-                    </div>
+                  <div className="space-y-2">
+                    <Link
+                      href="/campaign/new"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                        pathname === "/campaign/new" && "bg-accent"
+                      )}
+                    >
+                      <Target className="h-4 w-4 text-primary" />
+                      <span>Campaign Lab</span>
+                    </Link>
+                    <Link
+                      href="/creative-tester"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                        pathname === "/creative-tester" && "bg-accent"
+                      )}
+                    >
+                      <Lightbulb className="h-4 w-4 text-primary" />
+                      <span>Creative Tester</span>
+                    </Link>
+                    <Link
+                      href="/campaigns"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-all hover:bg-accent/50",
+                        pathname === "/campaigns" && "bg-accent"
+                      )}
+                    >
+                      <BarChart3 className="h-4 w-4 text-primary" />
+                      <span>Campaigns</span>
+                    </Link>
                   </div>
                 </div>
               </SheetContent>

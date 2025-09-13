@@ -1,0 +1,325 @@
+{
+  "campaign_1757777838168_030232": {
+    "campaign_id": "campaign_1757777838168_030232",
+    "campaign": {
+      "id": "campaign_1757777838168_030232",
+      "name": "Test Integration Campaign",
+      "product": {
+        "name": "Test Product",
+        "category": "electronics",
+        "price": 199.0,
+        "description": "A test product",
+        "target_margin": 30.0
+      },
+      "targeting": {
+        "age_range": {
+          "min": 25,
+          "max": 45
+        },
+        "gender": "all",
+        "interests": [
+          "tech",
+          "gadgets"
+        ],
+        "location": [
+          "United States"
+        ],
+        "income": "medium"
+      },
+      "budget": {
+        "total": 1000.0,
+        "duration": 30,
+        "channels": {
+          "facebook": 0,
+          "instagram": 0,
+          "google_ads": 0,
+          "tiktok": 0,
+          "youtube": 0,
+          "linkedin": 0,
+          "twitter": 0,
+          "email": 0,
+          "seo": 0,
+          "influencer": 0
+        }
+      },
+      "channels": {
+        "preferred": [
+          "facebook",
+          "instagram"
+        ],
+        "avoided": []
+      },
+      "creatives": [],
+      "created_at": "2025-09-13 15:37:18.169157"
+    },
+    "simulation": {
+      "campaign_id": "campaign_1757777838168_030232",
+      "metrics": {
+        "estimated_reach": 66,
+        "estimated_engagement": 0,
+        "estimated_conversions": 0,
+        "estimated_roi": -100.0,
+        "cost_per_conversion": 0
+      },
+      "channel_breakdown": {
+        "facebook": {
+          "spend": 500.0,
+          "reach": 50,
+          "conversions": 0,
+          "roi": -100.0
+        },
+        "instagram": {
+          "spend": 500.0,
+          "reach": 16,
+          "conversions": 0,
+          "roi": -100.0
+        }
+      },
+      "timeline": [
+        {
+          "day": 1,
+          "reach": 0,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 2,
+          "reach": 0,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 3,
+          "reach": 0,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 4,
+          "reach": 1,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 5,
+          "reach": 1,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 6,
+          "reach": 1,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 7,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 8,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 9,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 10,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 11,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 12,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 13,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 14,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 15,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 16,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 17,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 18,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 19,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 20,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 21,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 22,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 23,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 24,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 25,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 26,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 27,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 28,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 29,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        },
+        {
+          "day": 30,
+          "reach": 2,
+          "conversions": 0,
+          "spend": 33.333333333333336
+        }
+      ]
+    },
+    "optimization": [
+      {
+        "type": "budget_reallocation",
+        "title": "Increase instagram budget",
+        "description": "Increase budget allocation to instagram by $352.31",
+        "impact": {
+          "roi_increase": 57.23275950000001,
+          "reach_increase": 3.5231000000000003,
+          "conversion_increase": 2.81848
+        },
+        "changes": {
+          "to_channel": "instagram",
+          "from_channel": null,
+          "amount": 352.31
+        }
+      },
+      {
+        "type": "budget_reallocation",
+        "title": "Increase google-ads budget",
+        "description": "Increase budget allocation to google-ads by $242.47",
+        "impact": {
+          "roi_increase": 39.3892515,
+          "reach_increase": 2.4247,
+          "conversion_increase": 1.93976
+        },
+        "changes": {
+          "to_channel": "google-ads",
+          "from_channel": null,
+          "amount": 242.47
+        }
+      },
+      {
+        "type": "budget_reallocation",
+        "title": "Increase tiktok budget",
+        "description": "Increase budget allocation to tiktok by $304.88",
+        "impact": {
+          "roi_increase": 49.527756000000004,
+          "reach_increase": 3.0488,
+          "conversion_increase": 2.43904
+        },
+        "changes": {
+          "to_channel": "tiktok",
+          "from_channel": null,
+          "amount": 304.88
+        }
+      },
+      {
+        "type": "budget_reallocation",
+        "title": "Increase facebook budget",
+        "description": "Increase budget allocation to facebook by $59.96",
+        "impact": {
+          "roi_increase": 9.740502000000001,
+          "reach_increase": 0.5996,
+          "conversion_increase": 0.47968
+        },
+        "changes": {
+          "to_channel": "facebook",
+          "from_channel": null,
+          "amount": 59.96
+        }
+      }
+    ],
+    "created_at": "2025-09-13T15:37:20.131781"
+  }
+}

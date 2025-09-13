@@ -1,0 +1,53 @@
+{
+  "campaign_1757777838168_030232": {
+    "id": "campaign_1757777838168_030232",
+    "name": "Test Integration Campaign",
+    "product": {
+      "name": "Test Product",
+      "category": "electronics",
+      "price": 199.0,
+      "description": "A test product",
+      "target_margin": 30.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 25,
+        "max": 45
+      },
+      "gender": "all",
+      "interests": [
+        "tech",
+        "gadgets"
+      ],
+      "location": [
+        "United States"
+      ],
+      "income": "medium"
+    },
+    "budget": {
+      "total": 1000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0,
+        "instagram": 0,
+        "google_ads": 0,
+        "tiktok": 0,
+        "youtube": 0,
+        "linkedin": 0,
+        "twitter": 0,
+        "email": 0,
+        "seo": 0,
+        "influencer": 0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "facebook",
+        "instagram"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "created_at": "2025-09-13T15:37:18.169157"
+  }
+}

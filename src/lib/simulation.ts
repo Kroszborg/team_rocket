@@ -56,8 +56,8 @@ export function runCampaignSimulation(campaign: Campaign): SimulationResults {
   const dailyBudget = totalBudget / duration;
   
   // Distribute budget across preferred channels or all available channels
-  const activeChannels = campaign.channels.preferred.length > 0 
-    ? campaign.channels.preferred 
+  const activeChannels: MarketingChannel[] = campaign.channels.preferred.length > 0 
+    ? campaign.channels.preferred as MarketingChannel[]
     : Object.keys(CHANNEL_METRICS).filter(c => !campaign.channels.avoided.includes(c as MarketingChannel)) as MarketingChannel[];
   
   const budgetPerChannel = totalBudget / activeChannels.length;

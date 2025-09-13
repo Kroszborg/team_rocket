@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     # API Configuration
     API_V1_STR: str = "/api"
     PROJECT_NAME: str = "Team Rocket Backend"
+    PORT: int = 8000
     
     # CORS
     ALLOWED_ORIGINS: List[str] = [
@@ -23,6 +24,9 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     DEBUG: bool = os.getenv("DEBUG", "true").lower() == "true"
+    
+    # AI API Keys
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     
     # Supabase Configuration
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")

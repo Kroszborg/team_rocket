@@ -14,12 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://virtualcampaignlab.com'),
+  metadataBase: new URL("https://adsim.com"),
   title: {
-    default: "Virtual Campaign Lab",
-    template: "%s | Virtual Campaign Lab"
+    default: "Adsim",
+    template: "%s | Adsim",
   },
-  description: "A powerful marketing campaign simulation and optimization platform. Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered creative scoring and data-driven insights.",
+  description:
+    "A powerful marketing campaign simulation and optimization platform. Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered creative scoring and data-driven insights.",
   keywords: [
     "marketing campaign",
     "campaign simulation",
@@ -32,11 +33,11 @@ export const metadata: Metadata = {
     "advertising platform",
     "marketing simulation",
     "creative scoring",
-    "multi-channel marketing"
+    "multi-channel marketing",
   ],
   authors: [{ name: "Team Rocket" }],
   creator: "Team Rocket",
-  publisher: "Virtual Campaign Lab",
+  publisher: "Adsim",
   formatDetection: {
     email: false,
     address: false,
@@ -45,25 +46,27 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://virtualcampaignlab.com",
-    siteName: "Virtual Campaign Lab",
-    title: "Virtual Campaign Lab - Marketing Campaign Simulation Platform",
-    description: "Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered creative scoring and data-driven insights.",
+    url: "https://adsim.com",
+    siteName: "Adsim",
+    title: "Adsim - Marketing Campaign Simulation Platform",
+    description:
+      "Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered creative scoring and data-driven insights.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Virtual Campaign Lab - Marketing Campaign Simulation Platform",
+        alt: "Adsim - Marketing Campaign Simulation Platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@virtualcampaignlab",
-    creator: "@virtualcampaignlab",
-    title: "Virtual Campaign Lab - Marketing Campaign Simulation Platform",
-    description: "Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered insights.",
+    site: "@adsim",
+    creator: "@adsim",
+    title: "Adsim - Marketing Campaign Simulation Platform",
+    description:
+      "Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered insights.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -87,10 +90,14 @@ export const metadata: Metadata = {
   referrer: "origin-when-cross-origin",
 };
 
-import { AuthProvider } from '@/contexts/AuthContext';
-import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from "@/contexts/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

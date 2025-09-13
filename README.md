@@ -1,4 +1,4 @@
-# Virtual Campaign Lab
+# Adsim
 
 A powerful marketing campaign simulation and optimization platform built with Next.js 15. Test, simulate, and optimize your marketing campaigns across multiple channels with AI-powered creative scoring and data-driven insights.
 
