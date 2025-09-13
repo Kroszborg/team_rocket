@@ -80,7 +80,7 @@ export class CampaignService {
     
     try {
       simulationResults = runCampaignSimulation(campaign);
-      optimizationSuggestions = generateOptimizationSuggestions(campaign, simulationResults);
+      optimizationSuggestions = await generateOptimizationSuggestions(campaign, simulationResults);
     } catch (error) {
       throw new SimulationError('Failed to run campaign simulation', campaign.id);
     }

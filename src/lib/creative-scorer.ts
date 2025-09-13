@@ -1,4 +1,5 @@
 import { Creative, CreativeScore } from './types';
+import { scoreCreativeWithML, checkMLServiceHealth } from '@/services/ml-service';
 
 // Keywords that typically perform well in marketing copy
 const POWER_WORDS = [
@@ -25,7 +26,25 @@ const EMOTIONAL_WORDS = [
   'concerned', 'relief', 'peace', 'comfort', 'security', 'freedom'
 ];
 
-export function scoreCreative(creative: Creative): CreativeScore {
+// Enhanced scoring function that uses ML when available
+export async function scoreCreative(creative: Creative): Promise<CreativeScore> {
+  try {
+    // Check if ML service is available and use it for scoring
+    const mlHealthy = await checkMLServiceHealth();
+    if (mlHealthy) {
+      const mlScore = await scoreCreativeWithML(creative);
+      return mlScore;
+    }
+  } catch (error) {
+    console.warn('ML service unavailable, falling back to rule-based scoring:', error);
+  }
+  
+  // Fallback to rule-based scoring
+  return scoreCreativeRuleBased(creative);
+}
+
+// Original rule-based scoring (renamed)
+function scoreCreativeRuleBased(creative: Creative): CreativeScore {
   const text = `${creative.title} ${creative.description} ${creative.callToAction}`.toLowerCase();
   const words = text.split(/\s+/);
   const wordCount = words.length;
@@ -173,13 +192,15 @@ export function scoreCreative(creative: Creative): CreativeScore {
   };
 }
 
-export function compareCreatives(creatives: Creative[]): Creative[] {
-  return creatives
-    .map(creative => ({
+export async function compareCreatives(creatives: Creative[]): Promise<Creative[]> {
+  const scoredCreatives = await Promise.all(
+    creatives.map(async (creative) => ({
       ...creative,
-      score: scoreCreative(creative),
+      score: await scoreCreative(creative),
     }))
-    .sort((a, b) => (b.score?.overall || 0) - (a.score?.overall || 0));
+  );
+  
+  return scoredCreatives.sort((a, b) => (b.score?.overall || 0) - (a.score?.overall || 0));
 }
 
 export function generateCreativeSuggestions(channel: string, productName: string, category: string): string[] {

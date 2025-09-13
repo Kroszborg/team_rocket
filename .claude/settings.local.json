@@ -4,7 +4,17 @@
       "Bash(npm run dev:*)",
       "Bash(mkdir:*)",
       "Bash(npm run build:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(chmod:*)",
+      "Bash(dir:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(copy:*)",
+      "Bash(curl:*)",
+      "Bash(findstr:*)",
+      "Bash(.run-docker.bat)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose:*)"
     ],
     "deny": [],
     "ask": []

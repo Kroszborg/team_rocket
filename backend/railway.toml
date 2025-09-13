@@ -1,0 +1,12 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "python main.py"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "always"
+
+[env]
+PYTHONPATH = "/app"
+PYTHONUNBUFFERED = "1"

@@ -1,4 +1,5 @@
-import { Campaign, SimulationResults, MarketingChannel } from './types';
+import { Campaign, SimulationResults, MarketingChannel, OptimizationSuggestion } from './types';
+import { optimizeCampaignBudget, optimizeCampaignBudgetFallback, checkMLServiceHealth } from '@/services/ml-service';
 
 // Channel performance multipliers based on industry data
 const CHANNEL_METRICS = {
@@ -135,10 +136,37 @@ export function runCampaignSimulation(campaign: Campaign): SimulationResults {
   };
 }
 
-export function generateOptimizationSuggestions(
+export async function generateOptimizationSuggestions(
   campaign: Campaign, 
   results: SimulationResults
-) {
+): Promise<OptimizationSuggestion[]> {
+  // Try ML-powered optimization first
+  try {
+    const mlHealthy = await checkMLServiceHealth();
+    if (mlHealthy) {
+      const mlOptimization = await optimizeCampaignBudget(campaign);
+      return mlOptimization.suggestions;
+    }
+  } catch (error) {
+    console.warn('ML optimization unavailable, using fallback:', error);
+    // Try fallback ML optimization
+    try {
+      const fallbackOptimization = await optimizeCampaignBudgetFallback(campaign);
+      return fallbackOptimization.suggestions;
+    } catch (fallbackError) {
+      console.warn('Fallback optimization failed, using rule-based:', fallbackError);
+    }
+  }
+  
+  // Fallback to rule-based optimization
+  return generateOptimizationSuggestionsRuleBased(campaign, results);
+}
+
+// Original rule-based optimization (renamed)
+function generateOptimizationSuggestionsRuleBased(
+  campaign: Campaign, 
+  results: SimulationResults
+): OptimizationSuggestion[] {
   const suggestions = [];
   
   // Find best and worst performing channels
