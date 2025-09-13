@@ -1,20 +1,34 @@
 from datetime import datetime
-from typing import List, Optional
-from fastapi import APIRouter, HTTPException, Query
+from typing import List, Optional, Dict, Any
+from fastapi import APIRouter, HTTPException, Query, Depends
 from app.models.types import (
     Campaign, CampaignCreateRequest, CampaignResponse,
     SimulationResults, OptimizationSuggestion
 )
 from app.core.storage import storage
 from app.services.campaign_service import CampaignService
+from app.services.database_service import database_service
+from app.core.auth_middleware import get_current_user
 
 router = APIRouter()
 
 @router.post("/", response_model=CampaignResponse)
-async def create_campaign(campaign_data: CampaignCreateRequest):
+async def create_campaign(
+    campaign_data: CampaignCreateRequest,
+    current_user: Optional[Dict[str, Any]] = Depends(get_current_user)
+):
     """Create a new campaign and run simulation"""
     try:
         result = await CampaignService.process_campaign(campaign_data.dict())
+        
+        # If user is authenticated, save campaign to database
+        if current_user and result:
+            await database_service.save_campaign(
+                user_id=current_user["id"],
+                campaign_data=campaign_data.dict(),
+                optimization_results=result
+            )
+        
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

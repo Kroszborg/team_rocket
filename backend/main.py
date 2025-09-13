@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
-from app.api.routes import campaigns, creative, ml
+from app.api.routes import campaigns, creative, ml, auth, dashboard
 from app.services.ml_service import load_ml_models
 from app.core.storage import storage
 
@@ -58,7 +58,9 @@ async def health_check():
         "services": {
             "campaigns": True,
             "creative_scoring": True,
-            "ml_models": True
+            "ml_models": True,
+            "authentication": True,
+            "user_dashboard": True
         }
     }
 
@@ -74,6 +76,8 @@ async def root():
 app.include_router(campaigns.router, prefix="/api/campaigns", tags=["campaigns"])
 app.include_router(creative.router, prefix="/api/creative", tags=["creative"])
 app.include_router(ml.router, prefix="/api/ml", tags=["ml"])
+app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 
 # Global error handler
 @app.exception_handler(Exception)

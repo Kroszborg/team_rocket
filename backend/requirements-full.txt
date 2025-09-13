@@ -17,3 +17,9 @@ transformers==4.36.2
 
 # Additional utilities
 requests==2.31.0
+
+# Database and Authentication
+supabase==2.3.4
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
