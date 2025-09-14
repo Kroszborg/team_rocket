@@ -21,6 +21,27 @@ export function useCampaignResults() {
         return;
       }
 
+      // Check if we have campaign data stored locally first
+      if (typeof params.id === 'string') {
+        const storedCampaign = localStorage.getItem(`campaign_${params.id}`);
+        if (storedCampaign) {
+          console.log('Found stored campaign, generating results locally');
+          const campaign = JSON.parse(storedCampaign);
+
+          // Generate results using simulation and ML services
+          const { runCampaignSimulation, generateOptimizationSuggestions } = await import('@/lib/simulation');
+
+          const simulation = runCampaignSimulation(campaign);
+          const optimization = await generateOptimizationSuggestions(campaign);
+
+          setCampaign({ ...campaign, id: params.id });
+          setResults(simulation);
+          setOptimization(optimization);
+          setLoading(false);
+          return;
+        }
+      }
+
       try {
         console.log(`Fetching results for campaign ${params.id}, attempt ${attempt + 1}`);
         

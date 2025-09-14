@@ -17,7 +17,7 @@ async def score_creative(request: CreativeScoreRequest):
             id="temp",
             title=request.title,
             description=request.description,
-            call_to_action=request.cta,
+            callToAction=request.cta,
             channel=request.channel
         )
         

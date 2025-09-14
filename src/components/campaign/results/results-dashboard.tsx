@@ -10,7 +10,11 @@ import { ResultsCharts } from './charts/results-charts';
 import { OptimizationInsights } from './optimization-insights';
 import { RefreshCw } from 'lucide-react';
 
-export function ResultsDashboard() {
+interface ResultsDashboardProps {
+  campaignId?: string;
+}
+
+export function ResultsDashboard({ campaignId }: ResultsDashboardProps) {
   const {
     results,
     campaign,

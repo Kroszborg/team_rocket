@@ -154,7 +154,7 @@ export async function generateOptimizationSuggestions(
       const fallbackOptimization = await optimizeCampaignBudgetFallback(campaign);
       return fallbackOptimization.suggestions;
     } catch (fallbackError) {
-      console.warn('Fallback optimization failed, using rule-based:', fallbackError);
+      console.warn('Fallback optimization failed:', fallbackError);
     }
   }
   

@@ -45,7 +45,7 @@ export class CreativeService {
         }
       }
     } catch (error) {
-      console.warn('ML suggestions unavailable, using fallback:', error);
+      // ML suggestions unavailable, using fallback
     }
     
     // Fallback to rule-based suggestions

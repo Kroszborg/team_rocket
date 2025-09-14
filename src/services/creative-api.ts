@@ -25,20 +25,28 @@ export const scoreCreative = async (creative: Creative): Promise<CreativeScore> 
     }
   }
 
-  // Fallback to local Next.js API
-  const response = await fetch('/api/creative-score', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ creative }),
-  });
+  // Fallback to local Next.js API, then demo mode
+  try {
+    const response = await fetch('/api/creative-score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ creative }),
+    });
 
-  const data = await response.json();
-  
-  if (!data.success) {
-    throw new Error(data.error || 'Failed to score creative');
+    if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
+        return data.score;
+      }
+    }
+  } catch (error) {
+    console.warn('Local API failed, using demo mode');
   }
 
-  return data.score;
+  // Final fallback to demo mode
+  const demoMode = (await import('@/lib/demo-mode')).default;
+  return demoMode.generateCreativeScore(creative);
 };
 
 export const generateSuggestions = async (

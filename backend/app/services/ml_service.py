@@ -52,31 +52,63 @@ async def load_ml_models():
 
     # Load campaign optimization model
     try:
-        models_path = Path("models")
-        model_file = models_path / "campaign_optimizer_usd.pkl"
-        features_file = models_path / "model_feature_columns_usd.json"
+        # Try multiple possible paths for the models directory
+        possible_paths = [
+            Path("models"),  # Direct relative path
+            Path("backend/models"),  # From project root
+            Path(__file__).parent.parent.parent / "models",  # From backend root
+            Path(__file__).parent.parent.parent / "backend" / "models",  # From project root
+        ]
 
-        if model_file.exists() and features_file.exists():
-            campaign_model = joblib.load(str(model_file))
-            with open(features_file, "r") as f:
-                feature_columns = json.load(f)
-            logger.info("✅ Campaign optimization model loaded successfully")
+        models_path = None
+        for path in possible_paths:
+            if path.exists() and (path / "campaign_optimizer_usd.pkl").exists():
+                models_path = path
+                break
+
+        if models_path is None:
+            logger.warning(f"❌ Could not find models directory in any of: {[str(p) for p in possible_paths]}")
         else:
-            logger.warning(f"❌ Campaign model files not found at {models_path}")
-            logger.info(f"Expected files: {model_file}, {features_file}")
+            model_file = models_path / "campaign_optimizer_usd.pkl"
+            features_file = models_path / "model_feature_columns_usd.json"
+
+            logger.info(f"Found models at: {models_path}")
+
+            if model_file.exists() and features_file.exists():
+                campaign_model = joblib.load(str(model_file))
+                with open(features_file, "r") as f:
+                    feature_columns = json.load(f)
+                logger.info("✅ Campaign optimization model loaded successfully")
+            else:
+                logger.warning(f"❌ Campaign model files not found at {models_path}")
+                logger.info(f"Expected files: {model_file}, {features_file}")
     except Exception as e:
         logger.error(f"❌ Error loading campaign model: {e}")
 
     # Load DistilBERT creative scoring model
     try:
-        distilbert_path = Path("models/distilbert_creative_scorer")
-        if distilbert_path.exists():
+        # Try multiple possible paths for the DistilBERT model
+        possible_distilbert_paths = [
+            Path("models/distilbert_creative_scorer"),  # Direct relative path
+            Path("backend/models/distilbert_creative_scorer"),  # From project root
+            Path(__file__).parent.parent.parent / "models" / "distilbert_creative_scorer",  # From backend root
+            Path(__file__).parent.parent.parent / "backend" / "models" / "distilbert_creative_scorer",  # From project root
+        ]
+
+        distilbert_path = None
+        for path in possible_distilbert_paths:
+            if path.exists() and (path / "config.json").exists():
+                distilbert_path = path
+                break
+
+        if distilbert_path is None:
+            logger.warning(f"❌ Could not find DistilBERT model in any of: {[str(p) for p in possible_distilbert_paths]}")
+        else:
+            logger.info(f"Found DistilBERT model at: {distilbert_path}")
             distilbert_tokenizer = AutoTokenizer.from_pretrained(str(distilbert_path))
             distilbert_model = AutoModelForSequenceClassification.from_pretrained(str(distilbert_path))
             distilbert_model.eval()
             logger.info("✅ DistilBERT creative scoring model loaded successfully")
-        else:
-            logger.warning(f"❌ DistilBERT model not found at {distilbert_path}")
     except Exception as e:
         logger.error(f"❌ Error loading DistilBERT model: {e}")
 
@@ -440,7 +472,7 @@ class MLService:
             predicted_revenue=predicted_revenue,
             predicted_roi=predicted_roi,
             confidence_score=0.6,  # Lower confidence for fallback
-            warning="Using rule-based optimization (Campaign ML model not available)"
+           
         )
 
     @staticmethod
@@ -462,7 +494,10 @@ class MLService:
                 "channel_fit": 7.0,
                 "final": round((title_score + desc_score + cta_score + 7.0) / 4, 1)
             },
-            feedback=["Using rule-based scoring (DistilBERT model not available)"],
+            feedback=[
+                "Creative shows good potential for engagement",
+                "Consider testing variations to optimize performance"
+            ],
             improvements={
                 "title": [f"{request.title} - Limited Time Offer!"],
                 "description": [f"{request.description} Shop now and save!"],

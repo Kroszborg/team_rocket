@@ -49,5 +49,288 @@
     },
     "creatives": [],
     "created_at": "2025-09-13T15:37:18.169157"
+  },
+  "campaign_1757798249714_702933": {
+    "id": "campaign_1757798249714_702933",
+    "name": "AirPods Pro Max Launch",
+    "product": {
+      "name": "AirPods Pro Max",
+      "category": "electronics",
+      "price": 549.0,
+      "description": "Premium over-ear headphones with active noise cancellation, spatial audio, and up to 20 hours of battery life. Perfect for audiophiles and professionals",
+      "target_margin": 35.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 25,
+        "max": 45
+      },
+      "gender": "all",
+      "interests": [
+        "technology",
+        "music",
+        "audio equipment",
+        "apple products",
+        "podcasts"
+      ],
+      "location": [
+        "United States",
+        "Canada",
+        "United Kingdom"
+      ],
+      "income": "high"
+    },
+    "budget": {
+      "total": 5000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0.0,
+        "instagram": 0.0,
+        "google_ads": 0.0,
+        "tiktok": 0.0,
+        "youtube": 0.0,
+        "linkedin": 0.0,
+        "twitter": 0.0,
+        "email": 0.0,
+        "seo": 0.0,
+        "influencer": 0.0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "google-ads",
+        "facebook",
+        "instagram",
+        "youtube"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "created_at": "2025-09-13T21:17:29.715145"
+  },
+  "campaign_1757798766119_872822": {
+    "id": "campaign_1757798766119_872822",
+    "name": "AirPods Pro Max Launch",
+    "product": {
+      "name": "AirPods Pro Max",
+      "category": "electronics",
+      "price": 549.0,
+      "description": "Premium over-ear headphones with active noise cancellation, spatial audio, and up to 20 hours of battery life. Perfect for audiophiles and professionals",
+      "target_margin": 35.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 25,
+        "max": 45
+      },
+      "gender": "all",
+      "interests": [
+        "technology",
+        "music",
+        "audio equipment",
+        "apple products",
+        "podcasts"
+      ],
+      "location": [
+        "United States",
+        "Canada",
+        "United Kingdom"
+      ],
+      "income": "high"
+    },
+    "budget": {
+      "total": 5000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0.0,
+        "instagram": 0.0,
+        "google_ads": 0.0,
+        "tiktok": 0.0,
+        "youtube": 0.0,
+        "linkedin": 0.0,
+        "twitter": 0.0,
+        "email": 0.0,
+        "seo": 0.0,
+        "influencer": 0.0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "google-ads",
+        "facebook",
+        "instagram",
+        "youtube"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "created_at": "2025-09-13T21:26:06.119366"
+  },
+  "campaign_1757799867688_993934": {
+    "id": "campaign_1757799867688_993934",
+    "name": "AirPods Pro Max Launch",
+    "product": {
+      "name": "AirPods Pro Max",
+      "category": "electronics",
+      "price": 549.0,
+      "description": "Premium over-ear headphones with active noise cancellation, spatial audio, and up to 20 hours of battery life. Perfect for audiophiles and professionals.",
+      "target_margin": 35.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 25,
+        "max": 45
+      },
+      "gender": "all",
+      "interests": [
+        "technology",
+        "music",
+        "audio equipment",
+        "apple products",
+        "podcasts"
+      ],
+      "location": [
+        "United States",
+        "Canada",
+        "United Kingdom"
+      ],
+      "income": "high"
+    },
+    "budget": {
+      "total": 5000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0.0,
+        "instagram": 0.0,
+        "google_ads": 0.0,
+        "tiktok": 0.0,
+        "youtube": 0.0,
+        "linkedin": 0.0,
+        "twitter": 0.0,
+        "email": 0.0,
+        "seo": 0.0,
+        "influencer": 0.0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "facebook",
+        "instagram",
+        "google-ads",
+        "youtube"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "created_at": "2025-09-13T21:44:27.688313"
+  },
+  "campaign_1757801093659_376650": {
+    "id": "campaign_1757801093659_376650",
+    "name": "AirPods Pro Max Launch",
+    "product": {
+      "name": "AirPods Pro Max ",
+      "category": "electronics",
+      "price": 549.0,
+      "description": "Premium over-ear headphones with active noise cancellation, spatial audio, and up to 20 hours of battery life. Perfect for audiophiles and professionals",
+      "target_margin": 35.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 18,
+        "max": 65
+      },
+      "gender": "all",
+      "interests": [],
+      "location": [],
+      "income": "high"
+    },
+    "budget": {
+      "total": 50000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0.0,
+        "instagram": 0.0,
+        "google_ads": 0.0,
+        "tiktok": 0.0,
+        "youtube": 0.0,
+        "linkedin": 0.0,
+        "twitter": 0.0,
+        "email": 0.0,
+        "seo": 0.0,
+        "influencer": 0.0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "facebook",
+        "instagram",
+        "google-ads",
+        "tiktok",
+        "youtube"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "created_at": "2025-09-13T22:04:53.659692"
+  },
+  "campaign_1757802671263_262298": {
+    "id": "campaign_1757802671263_262298",
+    "name": "AirPods Pro Max Launch",
+    "product": {
+      "name": "AirPods Pro Max ",
+      "category": "electronics",
+      "price": 549.0,
+      "description": "Premium over-ear headphones with active noise cancellation, spatial audio, and up to 20 hours of battery life. Perfect for audiophiles and professionals.\n",
+      "target_margin": 35.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 25,
+        "max": 45
+      },
+      "gender": "all",
+      "interests": [
+        "technology",
+        "music",
+        "audio equipment",
+        "apple products",
+        "podcasts"
+      ],
+      "location": [
+        "United States",
+        "Canada",
+        "United Kingdom"
+      ],
+      "income": "high"
+    },
+    "budget": {
+      "total": 50000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0.0,
+        "instagram": 0.0,
+        "google_ads": 0.0,
+        "tiktok": 0.0,
+        "youtube": 0.0,
+        "linkedin": 0.0,
+        "twitter": 0.0,
+        "email": 0.0,
+        "seo": 0.0,
+        "influencer": 0.0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "facebook",
+        "instagram",
+        "google-ads",
+        "tiktok",
+        "youtube"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "status": "draft",
+    "created_at": "2025-09-14T04:01:11.263686"
   }
 }

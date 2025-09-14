@@ -136,7 +136,8 @@ function CampaignsPage() {
     window.URL.revokeObjectURL(url);
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | undefined) => {
+    if (!status) return <Badge variant="secondary">Unknown</Badge>;
     switch (status.toLowerCase()) {
       case 'active':
         return <Badge className="bg-green-100 text-green-800 hover:bg-green-200">{status}</Badge>;

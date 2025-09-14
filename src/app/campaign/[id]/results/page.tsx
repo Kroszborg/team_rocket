@@ -1,10 +1,18 @@
 import { MainLayout } from '@/components/layout/main-layout';
 import { ResultsDashboard } from '@/components/campaign/results/results-dashboard';
 
-export default function ResultsPage() {
+interface ResultsPageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+export default async function ResultsPage({ params }: ResultsPageProps) {
+  const { id } = await params;
+
   return (
     <MainLayout>
-      <ResultsDashboard />
+      <ResultsDashboard campaignId={id} />
     </MainLayout>
   );
 }

@@ -1,7 +1,7 @@
 from typing import List
 import logging
 
-from app.models.types import Creative, CreativeScore, MLCreativeScoreRequest
+from app.models.types import Creative, CreativeScore, CreativeBreakdown, MLCreativeScoreRequest
 from app.services.ml_service import MLService
 
 logger = logging.getLogger(__name__)
@@ -33,12 +33,12 @@ class CreativeService:
             # Convert ML response to CreativeScore format
             score = CreativeScore(
                 overall=ml_response.scores["final"],
-                breakdown={
-                    "clarity": ml_response.scores["title"],
-                    "urgency": ml_response.scores["description"],
-                    "relevance": ml_response.scores["channel_fit"],
-                    "call_to_action": ml_response.scores["cta"]
-                },
+                breakdown=CreativeBreakdown(
+                    clarity=ml_response.scores["title"],
+                    urgency=ml_response.scores["description"],
+                    relevance=ml_response.scores["channel_fit"],
+                    call_to_action=ml_response.scores["cta"]
+                ),
                 suggestions=[
                     *ml_response.feedback,
                     *ml_response.improvements.get("title", [])[:2],
@@ -82,12 +82,12 @@ class CreativeService:
         
         return CreativeScore(
             overall=round(overall_score, 1),
-            breakdown={
-                "clarity": clarity_score,
-                "urgency": urgency_score,
-                "relevance": relevance_score,
-                "call_to_action": cta_score
-            },
+            breakdown=CreativeBreakdown(
+                clarity=clarity_score,
+                urgency=urgency_score,
+                relevance=relevance_score,
+                call_to_action=cta_score
+            ),
             suggestions=suggestions[:3]
         )
 

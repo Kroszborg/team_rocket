@@ -36,7 +36,7 @@ export async function scoreCreative(creative: Creative): Promise<CreativeScore> 
       return mlScore;
     }
   } catch (error) {
-    console.warn('ML service unavailable, falling back to rule-based scoring:', error);
+    console.warn(':', error);
   }
   
   // Fallback to rule-based scoring

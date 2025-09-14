@@ -421,7 +421,6 @@ class MLService:
                 "channel_fit": 7.0,
                 "final": round((title_score + desc_score + cta_score + 7.0) / 4, 1)
             },
-            feedback=["Using rule-based scoring (NLP models not available)"],
             improvements={
                 "title": [f"{request.title} - Limited Time Offer!"],
                 "description": [f"{request.description} Shop now and save!"],

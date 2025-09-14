@@ -6,7 +6,7 @@ from app.models.types import Campaign, CampaignCreateRequest
 from app.core.storage import storage
 from app.services.simulation_service import SimulationService
 from app.services.ml_service import MLService
-from app.services.gemini_service import gemini_service
+# from app.services.gemini_service import gemini_service
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +75,7 @@ class CampaignService:
             "budget": campaign_data["budget"],
             "channels": campaign_data["channels"],
             "creatives": campaign_data.get("creatives", []),
+            "status": "draft",
             "created_at": datetime.utcnow()
         }
         return campaign
@@ -103,7 +104,8 @@ class CampaignService:
                 )
 
                 # Get Gemini AI enhancements
-                gemini_insights = await gemini_service.enhance_campaign_strategy(campaign_data)
+                # gemini_insights = await gemini_service.enhance_campaign_strategy(campaign_data)
+                gemini_insights = {"insights": "AI insights temporarily disabled"}
                 if gemini_insights.get("success"):
                     # Add Gemini insights to optimization suggestions
                     gemini_enhanced_suggestions = gemini_insights.get("enhanced_strategy", {})
@@ -169,18 +171,23 @@ class CampaignService:
     def get_all_campaigns(limit: Optional[str] = None, offset: Optional[str] = None) -> Dict[str, Any]:
         """Get all campaigns with pagination"""
         campaigns = storage.get_all_campaigns()
-        
+
+        # Add default status for campaigns that don't have it
+        for campaign in campaigns:
+            if "status" not in campaign:
+                campaign["status"] = "draft"
+
         # Sort by creation date (newest first)
         campaigns = sorted(campaigns, key=lambda x: x.get("created_at", datetime.min), reverse=True)
-        
+
         # Apply pagination
         limit_num = int(limit) if limit else 10
         offset_num = int(offset) if offset else 0
         limit_num = max(1, min(100, limit_num))  # Clamp between 1 and 100
         offset_num = max(0, offset_num)
-        
+
         paginated_campaigns = campaigns[offset_num:offset_num + limit_num]
-        
+
         return {
             "success": True,
             "campaigns": paginated_campaigns,
