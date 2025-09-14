@@ -81,33 +81,6 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Enhanced Stats */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-lg sm:max-w-2xl mx-auto pt-8 border-t border-border/40 px-4 sm:px-0">
-              <div className="text-center group cursor-default">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-1 sm:mb-2 group-hover:scale-110 transition-transform">
-                  10+
-                </div>
-                <div className="text-xs sm:text-sm text-muted-foreground font-medium">
-                  Marketing Channels
-                </div>
-              </div>
-              <div className="text-center group cursor-default">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-1 sm:mb-2 group-hover:scale-110 transition-transform">
-                  95%
-                </div>
-                <div className="text-xs sm:text-sm text-muted-foreground font-medium">
-                  Accuracy Rate
-                </div>
-              </div>
-              <div className="text-center group cursor-default">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-1 sm:mb-2 group-hover:scale-110 transition-transform">
-                  $0
-                </div>
-                <div className="text-xs sm:text-sm text-muted-foreground font-medium">
-                  Risk to Test
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 

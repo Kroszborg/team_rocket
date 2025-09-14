@@ -90,13 +90,14 @@ export default function CreativeTesterPage() {
 
   return (
     <MainLayout>
-      <div className="container mx-auto py-8 max-w-6xl">
+      <div className="container mx-auto py-8 max-w-7xl">
         <CreativeTesterHeader />
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left Column - Form and Suggestions */}
           <div className="space-y-6">
-            <CreativeForm 
-              creative={creative} 
+            <CreativeForm
+              creative={creative}
               setCreative={setCreative}
               onScore={handleScore}
               onGenerateSuggestions={handleGenerateSuggestions}
@@ -113,6 +114,7 @@ export default function CreativeTesterPage() {
             />
           </div>
 
+          {/* Middle Column - ML Score */}
           <div>
             {score ? (
               <ScoreDisplay score={score} />
@@ -120,6 +122,7 @@ export default function CreativeTesterPage() {
               <ScorePlaceholder />
             )}
           </div>
+
         </div>
       </div>
     </MainLayout>

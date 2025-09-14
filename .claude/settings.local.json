@@ -17,7 +17,8 @@
       "Bash(docker-compose:*)",
       "Bash(npm install:*)",
       "Bash(find:*)",
-      "Bash(comm:*)"
+      "Bash(comm:*)",
+      "Bash(del \"C:\\coding\\team_rocket\\backend\\app\\services\\ml_service_old.py\")"
     ],
     "deny": [],
     "ask": []

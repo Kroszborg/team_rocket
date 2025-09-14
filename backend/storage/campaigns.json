@@ -332,5 +332,54 @@
     "creatives": [],
     "status": "draft",
     "created_at": "2025-09-14T04:01:11.263686"
+  },
+  "campaign_1757805750788_242540": {
+    "id": "campaign_1757805750788_242540",
+    "name": "Tech Product Campaign",
+    "product": {
+      "name": "wireless headphones",
+      "category": "electronics",
+      "price": 549.0,
+      "description": "Premium over-ear headphones with active noise cancellation, spatial audio, and up to 20 hours of battery life. Perfect for audiophiles and professionals.",
+      "target_margin": 35.0
+    },
+    "targeting": {
+      "age_range": {
+        "min": 25,
+        "max": 45
+      },
+      "gender": "all",
+      "interests": [],
+      "location": [],
+      "income": "high"
+    },
+    "budget": {
+      "total": 5000.0,
+      "duration": 30,
+      "channels": {
+        "facebook": 0.0,
+        "instagram": 0.0,
+        "google_ads": 0.0,
+        "tiktok": 0.0,
+        "youtube": 0.0,
+        "linkedin": 0.0,
+        "twitter": 0.0,
+        "email": 0.0,
+        "seo": 0.0,
+        "influencer": 0.0
+      }
+    },
+    "channels": {
+      "preferred": [
+        "facebook",
+        "instagram",
+        "google-ads",
+        "tiktok"
+      ],
+      "avoided": []
+    },
+    "creatives": [],
+    "status": "draft",
+    "created_at": "2025-09-14T04:52:30.788672"
   }
 }

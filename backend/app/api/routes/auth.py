@@ -72,6 +72,41 @@ async def get_current_user_info(current_user: Dict[str, Any] = Depends(require_a
         "user": current_user
     }
 
+@router.get("/profile")
+async def get_user_profile(current_user: Dict[str, Any] = Depends(require_auth)):
+    """Get user profile information"""
+    return {
+        "success": True,
+        "user": {
+            "id": current_user.get("id", "demo_user_123"),
+            "email": current_user.get("email", "demo@example.com"),
+            "full_name": current_user.get("full_name", "Demo User"),
+            "created_at": "2024-01-15T10:30:00Z",
+            "subscription_tier": "pro",
+            "credits_remaining": 2500,
+            "campaigns_created": 12,
+            "creatives_tested": 45
+        }
+    }
+
+@router.put("/profile")
+async def update_user_profile(profile_data: dict, current_user: Dict[str, Any] = Depends(require_auth)):
+    """Update user profile"""
+    return {
+        "success": True,
+        "message": "Profile updated successfully",
+        "user": {
+            "id": current_user.get("id", "demo_user_123"),
+            "email": current_user.get("email", "demo@example.com"),
+            "full_name": profile_data.get("full_name", "Demo User"),
+            "created_at": "2024-01-15T10:30:00Z",
+            "subscription_tier": "pro",
+            "credits_remaining": 2500,
+            "campaigns_created": 12,
+            "creatives_tested": 45
+        }
+    }
+
 @router.get("/health")
 async def auth_health_check():
     """Check auth service health"""

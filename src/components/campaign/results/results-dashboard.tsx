@@ -8,6 +8,7 @@ import { ResultsHeader } from './results-header';
 import { MetricsOverview } from './metrics-overview';
 import { ResultsCharts } from './charts/results-charts';
 import { OptimizationInsights } from './optimization-insights';
+import { GeminiOptimization } from './gemini-optimization';
 import { RefreshCw } from 'lucide-react';
 
 interface ResultsDashboardProps {
@@ -85,7 +86,10 @@ export function ResultsDashboard({ campaignId }: ResultsDashboardProps) {
 
       <ResultsCharts results={results} />
 
-      <OptimizationInsights optimization={optimization} />
+      <div className="grid lg:grid-cols-2 gap-8">
+        <OptimizationInsights optimization={optimization} />
+        <GeminiOptimization campaignId={campaignId} campaignData={campaign} />
+      </div>
     </div>
   );
 }

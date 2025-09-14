@@ -154,6 +154,13 @@ class ApiClient {
     return this.request<any>(`/api/creative/suggestions?${params}`); // Define specific type later
   }
 
+  async analyzeCreative(creativeData: CreativeData) {
+    return this.request<any>('/api/creative/analyze', {
+      method: 'POST',
+      body: JSON.stringify(creativeData),
+    });
+  }
+
   // ML APIs
   async optimizeCampaign(optimizationData: OptimizationData) {
     return this.request<any>('/api/ml/campaign/optimize', { // Define specific type later

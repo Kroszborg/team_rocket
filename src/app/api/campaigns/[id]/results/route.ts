@@ -72,7 +72,7 @@ export async function POST(
     if (backendAvailable) {
       try {
         // Try to regenerate results via backend
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/campaigns/${campaignId}/results`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/campaigns/${campaignId}/results`, {
           method: 'POST'
         });
 

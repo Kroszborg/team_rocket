@@ -77,7 +77,7 @@ async def get_campaign_results(campaign_id: str):
         results = storage.get_results(campaign_id)
         if not results:
             raise HTTPException(status_code=404, detail="Campaign results not found")
-        
+
         return {
             "success": True,
             "campaign_id": campaign_id,
@@ -85,6 +85,29 @@ async def get_campaign_results(campaign_id: str):
             "simulation": results.simulation,
             "optimization": results.optimization,
             "created_at": results.created_at
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/{campaign_id}/results", response_model=dict)
+async def regenerate_campaign_results(campaign_id: str):
+    """Regenerate campaign results"""
+    try:
+        # Get existing campaign
+        campaign_data = CampaignService.get_campaign(campaign_id)
+        if not campaign_data or not campaign_data.get("success"):
+            raise HTTPException(status_code=404, detail="Campaign not found")
+
+        # Regenerate results
+        result = await CampaignService.process_campaign(campaign_data["campaign"])
+
+        return {
+            "success": True,
+            "campaign_id": campaign_id,
+            "results": result.get("simulation"),
+            "optimization": result.get("optimization")
         }
     except HTTPException:
         raise

@@ -51,13 +51,19 @@ class MLServiceError extends Error {
 
 async function callMLService<T>(endpoint: string, data?: any): Promise<T> {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
     const response = await fetch(`${ML_SERVICE_URL}${endpoint}`, {
       method: data ? 'POST' : 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       body: data ? JSON.stringify(data) : undefined,
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();

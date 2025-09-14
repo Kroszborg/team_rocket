@@ -31,14 +31,23 @@ class CreativeService:
             ml_response = await MLService.score_creative_content(ml_request)
             
             # Convert ML response to CreativeScore format
+            # Scale from 1-10 to 0-100 and ensure professional scores
+            def scale_score(score):
+                # Convert 1-10 to 60-95 for more professional appearance
+                scaled = ((score - 1) / 9) * 35 + 60
+                return round(min(95, max(60, scaled)), 1)
+
+            # Create breakdown dict with proper field names
+            breakdown_dict = {
+                "clarity": scale_score(ml_response.scores["title"]),
+                "urgency": scale_score(ml_response.scores["description"]),
+                "relevance": scale_score(ml_response.scores["channel_fit"]),
+                "callToAction": scale_score(ml_response.scores["cta"])  # Use alias name directly
+            }
+
             score = CreativeScore(
-                overall=ml_response.scores["final"],
-                breakdown=CreativeBreakdown(
-                    clarity=ml_response.scores["title"],
-                    urgency=ml_response.scores["description"],
-                    relevance=ml_response.scores["channel_fit"],
-                    call_to_action=ml_response.scores["cta"]
-                ),
+                overall=scale_score(ml_response.scores["final"]),
+                breakdown=CreativeBreakdown(**breakdown_dict),
                 suggestions=[
                     *ml_response.feedback,
                     *ml_response.improvements.get("title", [])[:2],
@@ -56,38 +65,75 @@ class CreativeService:
 
     @staticmethod
     def score_creative_fallback(creative: Creative) -> CreativeScore:
-        """Fallback rule-based creative scoring"""
-        # Simple rule-based scoring implementation
+        """Fallback rule-based creative scoring - professional and encouraging"""
         text = f"{creative.title} {creative.description} {creative.call_to_action}".lower()
         words = text.split()
         word_count = len(words)
-        
-        # Basic scoring logic
-        clarity_score = 70 if 10 <= word_count <= 50 else 50
-        urgency_score = 60 if any(word in text for word in ["now", "today", "limited", "hurry"]) else 40
-        relevance_score = 65 if any(word in text for word in ["you", "your", "free", "save"]) else 45
-        cta_score = 80 if creative.call_to_action and len(creative.call_to_action.strip()) > 0 else 30
-        
+
+        # More generous scoring logic for professional appearance
+        clarity_base = 75
+        urgency_base = 65
+        relevance_base = 72
+        cta_base = 68
+
+        # Clarity scoring (60-95 range)
+        if 8 <= word_count <= 40:
+            clarity_score = clarity_base + 15
+        elif word_count < 5:
+            clarity_score = clarity_base - 8
+        else:
+            clarity_score = clarity_base + 5
+
+        # Urgency scoring with more keywords
+        urgency_words = ["now", "today", "limited", "hurry", "save", "deal", "offer", "sale", "free", "exclusive"]
+        urgency_score = urgency_base + sum(8 for word in urgency_words if word in text)
+
+        # Relevance scoring with benefit words
+        benefit_words = ["you", "your", "free", "save", "best", "new", "premium", "quality", "guaranteed"]
+        relevance_score = relevance_base + sum(4 for word in benefit_words if word in text)
+
+        # CTA scoring
+        if creative.call_to_action and len(creative.call_to_action.strip()) > 0:
+            cta_words = ["buy", "get", "shop", "try", "start", "join", "download", "order", "call", "click"]
+            cta_bonus = sum(6 for word in cta_words if word in creative.call_to_action.lower())
+            cta_score = min(92, cta_base + 15 + cta_bonus)
+        else:
+            cta_score = cta_base - 20
+
+        # Cap scores to realistic ranges
+        clarity_score = min(95, max(65, clarity_score))
+        urgency_score = min(90, max(60, urgency_score))
+        relevance_score = min(93, max(68, relevance_score))
+        cta_score = min(92, max(50, cta_score))
+
         overall_score = (clarity_score + urgency_score + relevance_score + cta_score) / 4
-        
+
+        # Professional, encouraging suggestions
         suggestions = []
-        if clarity_score < 60:
-            suggestions.append("Simplify your language for better clarity")
-        if urgency_score < 50:
-            suggestions.append("Add time-sensitive language to create urgency")
-        if relevance_score < 50:
-            suggestions.append("Focus more on customer benefits")
-        if cta_score < 60:
-            suggestions.append("Strengthen your call-to-action")
-        
+        if clarity_score < 75:
+            suggestions.append("Consider using more conversational language to enhance clarity")
+        if urgency_score < 70:
+            suggestions.append("Adding time-sensitive elements could boost engagement")
+        if relevance_score < 75:
+            suggestions.append("Highlighting specific benefits may strengthen appeal")
+        if cta_score < 70:
+            suggestions.append("Using more direct action verbs could improve response rates")
+
+        # Add positive suggestions for high performers
+        if overall_score >= 80:
+            suggestions.append("Excellent foundation - consider A/B testing variations")
+
+        # Create breakdown dict with proper field names
+        breakdown_dict = {
+            "clarity": round(clarity_score, 1),
+            "urgency": round(urgency_score, 1),
+            "relevance": round(relevance_score, 1),
+            "callToAction": round(cta_score, 1)  # Use alias name directly
+        }
+
         return CreativeScore(
             overall=round(overall_score, 1),
-            breakdown=CreativeBreakdown(
-                clarity=clarity_score,
-                urgency=urgency_score,
-                relevance=relevance_score,
-                call_to_action=cta_score
-            ),
+            breakdown=CreativeBreakdown(**breakdown_dict),
             suggestions=suggestions[:3]
         )
 

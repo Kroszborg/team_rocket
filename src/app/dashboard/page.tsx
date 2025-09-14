@@ -209,14 +209,6 @@ function DashboardPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-3">
                             <h4 className="font-semibold">{campaign.name}</h4>
-                            <Badge variant={campaign.optimization_results?.expected_roi ? 
-                              (campaign.optimization_results.expected_roi > 1 ? 'default' : 'secondary') 
-                              : 'outline'}>
-                              {campaign.optimization_results?.expected_roi 
-                                ? `${(campaign.optimization_results.expected_roi * 100).toFixed(1)}% ROI`
-                                : 'Processing'
-                              }
-                            </Badge>
                           </div>
                           <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                             <span className="flex items-center gap-1">
