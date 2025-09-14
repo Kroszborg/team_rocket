@@ -6,7 +6,7 @@ from app.models.types import Campaign, CampaignCreateRequest
 from app.core.storage import storage
 from app.services.simulation_service import SimulationService
 from app.services.ml_service import MLService
-# from app.services.gemini_service import gemini_service
+from app.services.gemini_service import GeminiService
 
 logger = logging.getLogger(__name__)
 
@@ -104,8 +104,8 @@ class CampaignService:
                 )
 
                 # Get Gemini AI enhancements
-                # gemini_insights = await gemini_service.enhance_campaign_strategy(campaign_data)
-                gemini_insights = {"insights": "AI insights temporarily disabled"}
+                gemini_service = GeminiService()
+                gemini_insights = await gemini_service.enhance_campaign_strategy(campaign_data)
                 if gemini_insights.get("success"):
                     # Add Gemini insights to optimization suggestions
                     gemini_enhanced_suggestions = gemini_insights.get("enhanced_strategy", {})
